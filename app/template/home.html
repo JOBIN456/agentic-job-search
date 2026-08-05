@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Hub - Glassmorphism UI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated background elements */
+        .bg-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .blob-1 {
+            width: 300px;
+            height: 300px;
+            background: #ff006e;
+            top: -50px;
+            right: -50px;
+        }
+
+        .blob-2 {
+            width: 250px;
+            height: 250px;
+            background: #00d4ff;
+            bottom: -50px;
+            left: -50px;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(30px);
+            }
+        }
+
+        .container {
+            display: flex;
+            gap: 40px;
+            max-width: 900px;
+            width: 90%;
+            padding: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Glassmorphism Card Style */
+        .card {
+            flex: 1;
+            padding: 40px 30px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 40px 0 rgba(31, 38, 135, 0.5);
+        }
+
+        /* Icon styling */
+        .card-icon {
+            font-size: 60px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .card-1 .card-icon {
+            animation-delay: 0s;
+        }
+
+        .card-2 .card-icon {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Text styling */
+        .card h2 {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 600;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .card p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* Button styling */
+        .card-button {
+            width: 100%;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+       .file-input-wrapper a{
+        display: block;
+        width: 100%;
+        text-decoration: none;
+        text-align: center;
+       }
+        .card-1 .card-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .card-1 .card-button:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            transform: scale(1.05);
+        }
+
+        .card-2 .card-button {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .card-2 .card-button:hover {
+            background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+            box-shadow: 0 5px 20px rgba(245, 87, 108, 0.4);
+            transform: scale(1.05);
+        }
+
+        /* File input styling */
+        .file-input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            display: none;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .file-input-label:hover {
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            transform: scale(1.05);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .card h2 {
+                font-size: 24px;
+            }
+
+            .card-icon {
+                font-size: 50px;
+            }
+
+            .bg-blob {
+                width: 200px !important;
+                height: 200px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background blobs -->
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+
+    <!-- Main container -->
+    <div class="container">
+        <!-- CV Upload Card -->
+        <div class="card card-1">
+            <div class="card-icon">📄</div>
+            <h2>Upload CV</h2>
+            <p>Share your resume and let employers discover your potential</p>
+            <div class="file-input-wrapper">
+                <a class="card-button" href="/cv_details">View CV</a>
+            </div>
+        </div>
+
+        <!-- Job Search Card -->
+        <div class="card card-2">
+            <div class="card-icon">🔍</div>
+            <h2>Search Jobs</h2>
+            <p>Explore thousands of job opportunities matched to your skills</p>
+            <button class="card-button" onclick="searchJobs()">Start Searching</button>
+        </div>
+    </div>
+
+    <script>
+        // CV Upload handler
+        document.getElementById('cv-upload').addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const fileName = e.target.files[0].name;
+                console.log('CV uploaded:', fileName);
+                alert('CV uploaded successfully: ' + fileName);
+            }
+        });
+
+        // Job Search handler
+        function searchJobs() {
+            alert('Redirecting to job search page...');
+            // You can add actual navigation here
+            // window.location.href = '/jobs';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Upload & Profile Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background blobs */
+        .bg-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .blob-1 {
+            width: 300px;
+            height: 300px;
+            background: #ff006e;
+            top: -50px;
+            right: -50px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .blob-2 {
+            width: 250px;
+            height: 250px;
+            background: #00d4ff;
+            bottom: -50px;
+            left: -50px;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(30px);
+            }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 50px 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        /* Drag and Drop Area */
+        .drag-drop-area {
+            border: 2px dashed rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            padding: 50px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .drag-drop-area.dragover {
+            background: rgba(102, 126, 234, 0.3);
+            border-color: rgba(255, 255, 255, 0.8);
+            transform: scale(1.02);
+        }
+
+        .drag-drop-area:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .drag-drop-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .drag-drop-text h3 {
+            color: #ffffff;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .drag-drop-text p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+        }
+
+        #cv-file {
+            display: none;
+        }
+
+        .file-info {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.5);
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            color: #ffffff;
+            font-size: 14px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-info.show {
+            display: flex;
+        }
+
+        .file-info-icon {
+            font-size: 20px;
+        }
+
+        /* Button after drop area */
+        .btn-upload {
+            width: 100%;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 35px;
+        }
+
+        .btn-upload:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-upload:active {
+            transform: translateY(-1px);
+        }
+
+        /* Form Fields Section */
+        .form-section {
+            margin-bottom: 25px;
+        }
+
+        .form-section label {
+            display: block;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-section input,
+        .form-section select,
+        .form-section textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 14px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-section input::placeholder,
+        .form-section textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-section input:focus,
+        .form-section select:focus,
+        .form-section textarea:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-row .form-section {
+            margin-bottom: 0;
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            padding: 14px 30px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        .btn-submit:active {
+            transform: translateY(-1px);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .drag-drop-area {
+                padding: 40px 20px;
+            }
+        }
+
+        .success-message {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.5);
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background blobs -->
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Upload Your CV</h1>
+            <p>Complete your profile to get matched with the best opportunities</p>
+        </div>
+
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage">
+            ✓ Profile submitted successfully!
+        </div>
+
+        <!-- Form -->
+        <form id="profileForm">
+            <!-- Drag and Drop Area -->
+            <div class="drag-drop-area" id="dragDropArea">
+                <div class="drag-drop-icon">📁</div>
+                <div class="drag-drop-text">
+                    <h3>Drag & Drop your CV here</h3>
+                    <p>or click to browse (PDF, DOC, DOCX)</p>
+                </div>
+            </div>
+
+            <!-- File Info -->
+            <div class="file-info" id="fileInfo">
+                <div class="file-info-icon">✓</div>
+                <div id="fileName"></div>
+            </div>
+
+            <!-- Upload Button -->
+            <button type="button" class="btn-upload" id="browseBtn">Browse Files</button>
+
+            <!-- Hidden File Input -->
+            <input type="file" id="cv-file" accept=".pdf,.doc,.docx" style="display: none;">
+
+            <!-- Form Fields -->
+            <div class="form-section">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-section">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-section">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" placeholder="+1 (555) 000-0000">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-section">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" placeholder="City, Country">
+                </div>
+                <div class="form-section">
+                    <label for="experience">Years of Experience</label>
+                    <select id="experience" required>
+                        <option value="">Select...</option>
+                        <option value="0-1">0-1 Years</option>
+                        <option value="1-3">1-3 Years</option>
+                        <option value="3-5">3-5 Years</option>
+                        <option value="5-10">5-10 Years</option>
+                        <option value="10+">10+ Years</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <label for="jobTitle">Desired Job Title</label>
+                <input type="text" id="jobTitle" placeholder="e.g., Software Engineer, Product Manager">
+            </div>
+
+            <div class="form-section">
+                <label for="bio">Professional Summary</label>
+                <textarea id="bio" rows="4" placeholder="Tell us about yourself and your career goals..."></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn-submit">Submit Profile</button>
+        </form>
+    </div>
+
+    <script>
+        const dragDropArea = document.getElementById('dragDropArea');
+        const cvFileInput = document.getElementById('cv-file');
+        const browseBtn = document.getElementById('browseBtn');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const form = document.getElementById('profileForm');
+        const successMessage = document.getElementById('successMessage');
+
+        // Browse button click
+        browseBtn.addEventListener('click', () => {
+            cvFileInput.click();
+        });
+
+        // File input change
+        cvFileInput.addEventListener('change', handleFileSelect);
+
+        // Drag and drop events
+        dragDropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dragDropArea.classList.add('dragover');
+        });
+
+        dragDropArea.addEventListener('dragleave', () => {
+            dragDropArea.classList.remove('dragover');
+        });
+
+        dragDropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dragDropArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                if (validateFile(file)) {
+                    cvFileInput.files = files;
+                    handleFileSelect();
+                }
+            }
+        });
+
+        // File validation
+        function validateFile(file) {
+            const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+            
+            if (!validTypes.includes(file.type)) {
+                alert('Please upload a PDF or Word document');
+                return false;
+            }
+
+            if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                alert('File size should not exceed 5MB');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Handle file selection
+        function handleFileSelect() {
+            if (cvFileInput.files.length > 0) {
+                const file = cvFileInput.files[0];
+                fileName.textContent = `📄 ${file.name}`;
+                fileInfo.classList.add('show');
+                dragDropArea.style.opacity = '0.5';
+            }
+        }
+
+        // Form submission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Validate required fields
+            if (!cvFileInput.files.length) {
+                alert('Please upload your CV');
+                return;
+            }
+
+            if (!document.getElementById('fullName').value) {
+                alert('Please enter your full name');
+                return;
+            }
+
+            if (!document.getElementById('email').value) {
+                alert('Please enter your email');
+                return;
+            }
+
+            // Log form data (in real app, send to server)
+            console.log({
+                cv: cvFileInput.files[0].name,
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                location: document.getElementById('location').value,
+                experience: document.getElementById('experience').value,
+                jobTitle: document.getElementById('jobTitle').value,
+                bio: document.getElementById('bio').value
+            });
+
+            // Show success message
+            successMessage.classList.add('show');
+
+            // Reset form after 2 seconds
+            setTimeout(() => {
+                form.reset();
+                fileInfo.classList.remove('show');
+                dragDropArea.style.opacity = '1';
+                successMessage.classList.remove('show');
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
