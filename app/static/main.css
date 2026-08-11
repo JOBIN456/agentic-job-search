@@ -24,7 +24,7 @@
             position: fixed;
             border-radius: 50%;
             filter: blur(80px);
-            opacity: 0.3;
+            opacity: 0.2;
             z-index: 0;
         }
 
@@ -34,7 +34,7 @@
             background: #ff006e;
             top: -50px;
             right: -50px;
-            animation: float 6s ease-in-out infinite;
+            animation: float 5s ease-in-out infinite;
         }
 
         .blob-2 {
