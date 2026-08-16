@@ -34,7 +34,7 @@
             background: #ff006e;
             top: -50px;
             right: -50px;
-            animation: float 6s ease-in-out infinite;
+            animation: float 7s ease-in-out infinite;
         }
 
         .blob-2 {
@@ -43,7 +43,7 @@
             background: #00d4ff;
             bottom: -50px;
             left: -50px;
-            animation: float 8s ease-in-out infinite reverse;
+            animation: float 7s ease-in-out infinite reverse;
         }
 
         @keyframes float {
