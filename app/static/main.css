@@ -24,7 +24,7 @@
             position: fixed;
             border-radius: 50%;
             filter: blur(80px);
-            opacity: 0.3;
+            opacity: 0.4;
             z-index: 0;
         }
 
@@ -43,7 +43,7 @@
             background: #00d4ff;
             bottom: -50px;
             left: -50px;
-            animation: float 7s ease-in-out infinite reverse;
+            animation: float 8s ease-in-out infinite reverse;
         }
 
         @keyframes float {
@@ -125,7 +125,7 @@
 
         .drag-drop-text h3 {
             color: #ffffff;
-            font-size: 18px;
+            font-size: 19px;
             margin-bottom: 8px;
         }
 
