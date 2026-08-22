@@ -27,3 +27,24 @@ def home_page(request: Request):
             "title": "cv fetch"
         }
     )
+
+@router_frontend.get("/user_login")
+def user_login_page(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="login.html",
+        context={
+            "title": "user login"
+        }
+    )
+
+
+@router_frontend.get("/admin_login")
+def admin_login_page(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/adminlogin.html",
+        context={
+            "title": "admin login"
+        }
+    )
