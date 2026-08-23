@@ -48,3 +48,14 @@ def admin_login_page(request: Request):
             "title": "admin login"
         }
     )
+
+
+@router_frontend.get("/admin/home")
+def admin_home_page(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/adminhome.html",
+        context={
+            "title": "admin pabel"
+        }
+    )
