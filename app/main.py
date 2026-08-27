@@ -12,3 +12,4 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 app.include_router(router.router_frontend)
+app.include_router(router.router_admin)

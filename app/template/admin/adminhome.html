@@ -616,67 +616,42 @@
             </div>
 
 
-            <form id="userForm" onsubmit="saveUser(event)">
+            <form id="userForm">
 
                 <div class="form-group">
-
-                    <label>
-                        Name
-                    </label>
-
+                    <label>Name</label>
                     <input
                         type="text"
                         id="name"
-                        placeholder="Enter name"
-                        required
-                    >
-
+                        name="name"
+                        placeholder="Enter name" required                    >
                 </div>
-
-
+            
+               
+            
                 <div class="form-group">
-
-                    <label>
-                        Email
-                    </label>
-
+                    <label>Password</label>
                     <input
-                        type="email"
-                        id="email"
-                        placeholder="Enter email"
-                        required
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter password" required
                     >
-
                 </div>
-
-
+            
                 <div class="form-group">
-
-                    <label>
-                        Role
-                    </label>
-
-                    <select id="role">
-
-                        <option value="User">
-                            User
-                        </option>
-
-                        <option value="Admin">
-                            Admin
-                        </option>
-
+                    <label>Role</label>
+            
+                    <select id="role" name="role" required>
+                        <option value="User">User</option>
+                        <option value="Admin">Admin</option>
                     </select>
-
                 </div>
-
-
-                <button
-                    type="submit"
-                    class="save-btn">
+            
+                <button type="submit" class="save-btn">
                     Save User
                 </button>
-
+            
             </form>
 
         </div>
@@ -685,8 +660,56 @@
 
 
     <!-- ================= JAVASCRIPT ================= -->
-
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.21.0/dist/jquery.validate.min.js"></script>
     <script>
+        $(document).ready(function () {
+
+$("#userForm").validate({
+
+    submitHandler: function (form) {
+
+        const data = {
+            username: $("#name").val(),
+            password: $("#password").val(),
+            is_staff: $("#role").val() === "Admin"
+        };
+
+        $.ajax({
+            url: "/admin/data_submit",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+
+            success: function (response) {
+
+                alert("User created successfully!");
+
+                $("#userForm")[0].reset();
+
+                closeModal();
+
+                // Reload users table
+                // loadUsers();
+            },
+
+            error: function (xhr) {
+
+                console.log(xhr);
+
+                if (xhr.responseJSON) {
+                    alert(xhr.responseJSON.detail);
+                } else {
+                    alert("Something went wrong");
+                }
+            }
+        });
+
+        return false;
+    }
+});
+
+});
 
         let editingRow = null;
 
