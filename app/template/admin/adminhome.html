@@ -490,106 +490,31 @@
             <div class="table-container">
 
                 <div class="table-header">
-
+            
                     <h2>Users</h2>
-
+            
                     <button class="add-btn" onclick="openAddModal()">
                         + Add User
                     </button>
-
+            
                 </div>
-
-
+            
                 <table>
-
+            
                     <thead>
-
                         <tr>
                             <th>#</th>
-                            <th>Name</th>
-                            <th>Email</th>
+                            <th>Username</th>
                             <th>Role</th>
-                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
-
                     </thead>
-
+            
                     <tbody id="userTable">
-
-                        <tr>
-                            <td>1</td>
-                            <td>John Smith</td>
-                            <td>john@gmail.com</td>
-                            <td>User</td>
-                            <td>
-                                <span class="status">Active</span>
-                            </td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="edit-btn"
-                                            onclick="editUser(this)">
-                                        Edit
-                                    </button>
-
-                                    <button class="delete-btn"
-                                            onclick="deleteUser(this)">
-                                        Delete
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>2</td>
-                            <td>David Thomas</td>
-                            <td>david@gmail.com</td>
-                            <td>User</td>
-                            <td>
-                                <span class="status">Active</span>
-                            </td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="edit-btn"
-                                            onclick="editUser(this)">
-                                        Edit
-                                    </button>
-
-                                    <button class="delete-btn"
-                                            onclick="deleteUser(this)">
-                                        Delete
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>3</td>
-                            <td>Sarah Wilson</td>
-                            <td>sarah@gmail.com</td>
-                            <td>Admin</td>
-                            <td>
-                                <span class="status">Active</span>
-                            </td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="edit-btn"
-                                            onclick="editUser(this)">
-                                        Edit
-                                    </button>
-
-                                    <button class="delete-btn"
-                                            onclick="deleteUser(this)">
-                                        Delete
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-
                     </tbody>
-
+            
                 </table>
-
+            
             </div>
 
         </section>
@@ -663,6 +588,13 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.21.0/dist/jquery.validate.min.js"></script>
     <script>
+
+
+$(document).ready(function() {
+
+loadUsers();
+
+});
         $(document).ready(function () {
 
 $("#userForm").validate({
@@ -710,6 +642,68 @@ $("#userForm").validate({
 });
 
 });
+
+
+function loadUsers() {
+
+$.ajax({
+
+    url: "/admin/users",
+    type: "GET",
+
+    success: function(users) {
+
+        let table = $("#userTable");
+
+        table.empty();
+
+        users.forEach(function(user, index) {
+
+            let role = user.is_staff ? "Admin" : "User";
+
+            table.append(`
+                <tr>
+
+                    <td>${index + 1}</td>
+
+                    <td>${user.username}</td>
+                    <td>${role}</td>
+
+                    <td>
+                        <div class="action-buttons">
+
+                            <button
+                                class="edit-btn"
+                                onclick="editUser(${user.id})">
+                                Edit
+                            </button>
+
+                            <button
+                                class="delete-btn"
+                                onclick="deleteUser(${user.id})">
+                                Delete
+                            </button>
+
+                        </div>
+                    </td>
+
+                </tr>
+            `);
+
+        });
+
+    },
+
+    error: function(xhr) {
+
+        console.log(xhr);
+
+        alert("Failed to load users");
+
+    }
+
+});
+}
 
         let editingRow = null;
 
