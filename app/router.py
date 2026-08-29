@@ -81,7 +81,7 @@ def data_submit(user: UserSchema, db: Session = Depends(get_db)):
     if existing_user:
         raise HTTPException(
             status_code=400,
-            detail="Username already exists"
+            detail="Username already exists in DB"
         )
 
     # Create user
