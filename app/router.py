@@ -110,3 +110,35 @@ def get_users(db: Session = Depends(get_db)):
         }
         for user in users
     ]
+
+@router_admin.get("/admin/users")
+def get_users(db: Session = Depends(get_db)):
+
+    users = db.query(User).all()
+
+    return [
+        {
+            "id": user.id,
+            "username": user.username,
+            "is_staff": user.is_staff
+        }
+        for user in users
+    ]
+
+@router_admin.get("/admin/users/{user_id}")
+def get_user(user_id: int, db: Session = Depends(get_db)):
+
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
+
+    return {
+        "id": user.id,
+        "username": user.username,
+        "password":user.password,
+        "is_staff": user.is_staff
+    }

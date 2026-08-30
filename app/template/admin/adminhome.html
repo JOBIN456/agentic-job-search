@@ -823,27 +823,31 @@ $.ajax({
 
         // Edit User
 
-        function editUser(button) {
+        function editUser(userId) {
 
-            editingRow =
-                button.closest("tr");
+$.ajax({
+    url: `/admin/users/${userId}`,
+    type: "GET",
 
-            document.getElementById("modalTitle")
-                .innerText = "Edit User";
+    success: function(user) {
 
-            document.getElementById("name").value =
-                editingRow.cells[1].innerText;
+        $("#modalTitle").text("Edit User");
 
-            document.getElementById("email").value =
-                editingRow.cells[2].innerText;
+        $("#name").val(user.username);
+        $("#password").val(user.password);
 
-            document.getElementById("role").value =
-                editingRow.cells[3].innerText;
+        $("#role").val(
+            user.is_staff ? "Admin" : "User"
+        );
 
-            document.getElementById("userModal")
-                .classList.add("active");
-        }
+        $("#userModal").addClass("active");
+    },
 
+    error: function(xhr) {
+        alert(xhr.responseJSON?.detail || "Failed to get user");
+    }
+});
+}
 
         // Delete User
 
