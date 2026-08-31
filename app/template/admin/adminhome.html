@@ -583,362 +583,723 @@
 
     </div>
 
+<!-- ================= JAVASCRIPT ================= -->
 
-    <!-- ================= JAVASCRIPT ================= -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.21.0/dist/jquery.validate.min.js"></script>
-    <script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.21.0/dist/jquery.validate.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
-$(document).ready(function() {
+<script>
 
-loadUsers();
+    // =====================================================
+    // GLOBAL VARIABLE
+    // =====================================================
 
-});
-        $(document).ready(function () {
+    let editingUserId = null;
 
-$("#userForm").validate({
 
-    submitHandler: function (form) {
+    // =====================================================
+    // DOCUMENT READY
+    // =====================================================
 
-        const data = {
-            username: $("#name").val(),
-            password: $("#password").val(),
-            is_staff: $("#role").val() === "Admin"
-        };
+    $(document).ready(function () {
+
+        // Load users when page loads
+        loadUsers();
+
+
+        // =================================================
+        // FORM VALIDATION + CREATE / UPDATE
+        // =================================================
+
+        $("#userForm").validate({
+
+            rules: {
+
+                name: {
+                    required: true,
+                    minlength: 3
+                },
+
+                password: {
+                    required: function () {
+                        return editingUserId === null;
+                    },
+                    minlength: 6
+                },
+
+                role: {
+                    required: true
+                }
+
+            },
+
+            messages: {
+
+                name: {
+                    required: "Please enter username",
+                    minlength: "Username must be at least 3 characters"
+                },
+
+                password: {
+                    required: "Please enter password",
+                    minlength: "Password must be at least 6 characters"
+                },
+
+                role: {
+                    required: "Please select a role"
+                }
+
+            },
+
+
+            // =============================================
+            // FORM SUBMIT
+            // =============================================
+
+            submitHandler: function (form) {
+
+                const data = {
+
+                    username: $("#name").val(),
+
+                    password: $("#password").val(),
+
+                    is_staff: $("#role").val() === "Admin"
+
+                };
+
+
+                // =========================================
+                // CREATE
+                // =========================================
+
+                let url = "/admin/data_submit";
+
+                let method = "POST";
+
+                let successTitle = "User Created!";
+
+
+                // =========================================
+                // UPDATE
+                // =========================================
+
+                if (editingUserId !== null) {
+
+                    url = `/admin/users/${editingUserId}`;
+
+                    method = "PUT";
+
+                    successTitle = "User Updated!";
+
+                }
+
+
+                // =========================================
+                // AJAX REQUEST
+                // =========================================
+
+                $.ajax({
+
+                    url: url,
+
+                    type: method,
+
+                    contentType: "application/json",
+
+                    data: JSON.stringify(data),
+
+
+                    // =====================================
+                    // SUCCESS
+                    // =====================================
+
+                    success: function (response) {
+
+                        Swal.fire({
+
+                            icon: "success",
+
+                            title: successTitle,
+
+                            text: response.message ||
+                                  "Operation completed successfully.",
+
+                            timer: 1500,
+
+                            showConfirmButton: false
+
+                        });
+
+
+                        // Reset form
+
+                        $("#userForm")[0].reset();
+
+
+                        // Close modal
+
+                        closeModal();
+
+
+                        // Reset editing ID
+
+                        editingUserId = null;
+
+
+                        // Change modal title back
+
+                        $("#modalTitle").text("Add User");
+
+
+                        // Reload table
+
+                        loadUsers();
+
+                    },
+
+
+                    // =====================================
+                    // ERROR
+                    // =====================================
+
+                    error: function (xhr) {
+
+                        console.log(xhr);
+
+                        let message = "Something went wrong.";
+
+                        if (
+                            xhr.responseJSON &&
+                            xhr.responseJSON.detail
+                        ) {
+
+                            message = xhr.responseJSON.detail;
+
+                        }
+
+
+                        Swal.fire({
+
+                            icon: "error",
+
+                            title: "Error",
+
+                            text: message
+
+                        });
+
+                    }
+
+                });
+
+
+                return false;
+
+            }
+
+        });
+
+    });
+
+
+
+    // =====================================================
+    // LOAD USERS
+    // =====================================================
+
+    function loadUsers() {
 
         $.ajax({
-            url: "/admin/data_submit",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(data),
 
-            success: function (response) {
+            url: "/admin/users",
 
-                alert("User created successfully!");
+            type: "GET",
 
-                $("#userForm")[0].reset();
 
-                closeModal();
+            // =============================================
+            // SUCCESS
+            // =============================================
 
-                // Reload users table
-                // loadUsers();
+            success: function (users) {
+
+                let table = $("#userTable");
+
+                table.empty();
+
+
+                // If no users
+
+                if (users.length === 0) {
+
+                    table.append(`
+
+                        <tr>
+
+                            <td
+                                colspan="4"
+                                style="text-align:center;"
+                            >
+
+                                No users found
+
+                            </td>
+
+                        </tr>
+
+                    `);
+
+                    updateUserCount();
+
+                    return;
+
+                }
+
+
+                // =========================================
+                // LOOP USERS
+                // =========================================
+
+                users.forEach(function (user, index) {
+
+                    let role =
+                        user.is_staff
+                        ? "Admin"
+                        : "User";
+
+
+                    table.append(`
+
+                        <tr>
+
+                            <td>
+                                ${index + 1}
+                            </td>
+
+
+                            <td>
+                                ${user.username}
+                            </td>
+
+
+                            <td>
+                                ${role}
+                            </td>
+
+
+                            <td>
+
+                                <div class="action-buttons">
+
+
+                                    <!-- EDIT -->
+
+                                    <button
+
+                                        class="edit-btn"
+
+                                        onclick="editUser(${user.id})"
+
+                                    >
+
+                                        Edit
+
+                                    </button>
+
+
+                                    <!-- DELETE -->
+
+                                    <button
+
+                                        class="delete-btn"
+
+                                        onclick="deleteUser(${user.id})"
+
+                                    >
+
+                                        Delete
+
+                                    </button>
+
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    `);
+
+                });
+
+
+                // Update dashboard count
+
+                updateUserCount();
+
             },
+
+
+            // =============================================
+            // ERROR
+            // =============================================
 
             error: function (xhr) {
 
                 console.log(xhr);
 
-                if (xhr.responseJSON) {
-                    alert(xhr.responseJSON.detail);
-                } else {
-                    alert("Something went wrong");
-                }
+                Swal.fire({
+
+                    icon: "error",
+
+                    title: "Error",
+
+                    text: "Failed to load users."
+
+                });
+
             }
-        });
-
-        return false;
-    }
-});
-
-});
-
-
-function loadUsers() {
-
-$.ajax({
-
-    url: "/admin/users",
-    type: "GET",
-
-    success: function(users) {
-
-        let table = $("#userTable");
-
-        table.empty();
-
-        users.forEach(function(user, index) {
-
-            let role = user.is_staff ? "Admin" : "User";
-
-            table.append(`
-                <tr>
-
-                    <td>${index + 1}</td>
-
-                    <td>${user.username}</td>
-                    <td>${role}</td>
-
-                    <td>
-                        <div class="action-buttons">
-
-                            <button
-                                class="edit-btn"
-                                onclick="editUser(${user.id})">
-                                Edit
-                            </button>
-
-                            <button
-                                class="delete-btn"
-                                onclick="deleteUser(${user.id})">
-                                Delete
-                            </button>
-
-                        </div>
-                    </td>
-
-                </tr>
-            `);
 
         });
 
-    },
-
-    error: function(xhr) {
-
-        console.log(xhr);
-
-        alert("Failed to load users");
-
     }
 
-});
-}
-
-        let editingRow = null;
 
 
-        // Open Add User Modal
+    // =====================================================
+    // OPEN ADD USER MODAL
+    // =====================================================
 
-        function openAddModal() {
+    function openAddModal() {
 
-            editingRow = null;
+        // Reset edit mode
 
-            document.getElementById("modalTitle").innerText =
-                "Add User";
-
-            document.getElementById("userForm").reset();
-
-            document.getElementById("userModal")
-                .classList.add("active");
-        }
+        editingUserId = null;
 
 
-        // Close Modal
+        // Change title
 
-        function closeModal() {
-
-            document.getElementById("userModal")
-                .classList.remove("active");
-
-        }
+        $("#modalTitle").text("Add User");
 
 
-        // Save User
+        // Reset form
 
-        function saveUser(event) {
-
-            event.preventDefault();
-
-            const name =
-                document.getElementById("name").value;
-
-            const email =
-                document.getElementById("email").value;
-
-            const role =
-                document.getElementById("role").value;
+        $("#userForm")[0].reset();
 
 
-            // EDIT
-
-            if (editingRow) {
-
-                editingRow.cells[1].innerText = name;
-                editingRow.cells[2].innerText = email;
-                editingRow.cells[3].innerText = role;
-
-            }
-
-            // ADD
-
-            else {
-
-                const table =
-                    document.getElementById("userTable");
-
-                const row =
-                    table.insertRow();
-
-                const number =
-                    table.rows.length;
-
-                row.innerHTML = `
-
-                    <td>${number}</td>
-
-                    <td>${name}</td>
-
-                    <td>${email}</td>
-
-                    <td>${role}</td>
-
-                    <td>
-                        <span class="status">
-                            Active
-                        </span>
-                    </td>
-
-                    <td>
-
-                        <div class="action-buttons">
-
-                            <button
-                                class="edit-btn"
-                                onclick="editUser(this)">
-                                Edit
-                            </button>
-
-                            <button
-                                class="delete-btn"
-                                onclick="deleteUser(this)">
-                                Delete
-                            </button>
-
-                        </div>
-
-                    </td>
-
-                `;
-
-            }
-
-
-            updateUserCount();
-
-            closeModal();
-
-        }
-
-
-        // Edit User
-
-        function editUser(userId) {
-
-$.ajax({
-    url: `/admin/users/${userId}`,
-    type: "GET",
-
-    success: function(user) {
-
-        $("#modalTitle").text("Edit User");
-
-        $("#name").val(user.username);
-        $("#password").val(user.password);
-
-        $("#role").val(
-            user.is_staff ? "Admin" : "User"
-        );
+        // Open modal
 
         $("#userModal").addClass("active");
-    },
 
-    error: function(xhr) {
-        alert(xhr.responseJSON?.detail || "Failed to get user");
     }
-});
-}
 
-        // Delete User
 
-        function deleteUser(button) {
 
-            const row =
-                button.closest("tr");
+    // =====================================================
+    // CLOSE MODAL
+    // =====================================================
 
-            const name =
-                row.cells[1].innerText;
+    function closeModal() {
 
-            if (confirm(
-                `Are you sure you want to delete ${name}?`
-            )) {
+        $("#userModal").removeClass("active");
 
-                row.remove();
 
-                updateRowNumbers();
+        // Reset edit ID
 
-                updateUserCount();
+        editingUserId = null;
+
+
+        // Reset form
+
+        $("#userForm")[0].reset();
+
+
+        // Change title
+
+        $("#modalTitle").text("Add User");
+
+    }
+
+
+
+    // =====================================================
+    // EDIT USER
+    // =====================================================
+
+    function editUser(userId) {
+
+        // Store ID
+
+        editingUserId = userId;
+
+
+        $.ajax({
+
+            url: `/admin/users/${userId}`,
+
+            type: "GET",
+
+
+            // =============================================
+            // SUCCESS
+            // =============================================
+
+            success: function (user) {
+
+                // Change modal title
+
+                $("#modalTitle").text("Edit User");
+
+
+                // Fill username
+
+                $("#name").val(user.username);
+
+
+                // Fill password
+
+                $("#password").val(user.password);
+
+
+                // Fill role
+
+                $("#role").val(
+
+                    user.is_staff
+                    ? "Admin"
+                    : "User"
+
+                );
+
+
+                // Open modal
+
+                $("#userModal").addClass("active");
+
+            },
+
+
+            // =============================================
+            // ERROR
+            // =============================================
+
+            error: function (xhr) {
+
+                console.log(xhr);
+
+
+                Swal.fire({
+
+                    icon: "error",
+
+                    title: "Error",
+
+                    text:
+                        xhr.responseJSON?.detail ||
+                        "Failed to get user."
+
+                });
 
             }
 
-        }
+        });
+
+    }
 
 
-        // Update Row Numbers
 
-        function updateRowNumbers() {
+    // =====================================================
+    // DELETE USER
+    // =====================================================
 
-            const rows =
-                document.querySelectorAll(
-                    "#userTable tr"
-                );
+    function deleteUser(userId) {
 
-            rows.forEach((row, index) => {
+        // ================================================
+        // CONFIRMATION
+        // ================================================
 
-                row.cells[0].innerText =
-                    index + 1;
+        Swal.fire({
+
+            title: "Are you sure?",
+
+            text: "This user will be permanently deleted.",
+
+            icon: "warning",
+
+            showCancelButton: true,
+
+            confirmButtonText: "Yes, Delete",
+
+            cancelButtonText: "Cancel",
+
+            reverseButtons: true
+
+        })
+
+
+        // ================================================
+        // RESULT
+        // ================================================
+
+        .then((result) => {
+
+            if (!result.isConfirmed) {
+
+                return;
+
+            }
+
+
+            // =============================================
+            // DELETE API
+            // =============================================
+
+            $.ajax({
+
+                url: `/admin/users/${userId}`,
+
+                type: "DELETE",
+
+
+                // =========================================
+                // SUCCESS
+                // =========================================
+
+                success: function (response) {
+
+                    Swal.fire({
+
+                        icon: "success",
+
+                        title: "Deleted!",
+
+                        text:
+                            response.message ||
+                            "User deleted successfully.",
+
+                        timer: 1500,
+
+                        showConfirmButton: false
+
+                    });
+
+
+                    // Reload table
+
+                    loadUsers();
+
+                },
+
+
+                // =========================================
+                // ERROR
+                // =========================================
+
+                error: function (xhr) {
+
+                    console.log(xhr);
+
+
+                    Swal.fire({
+
+                        icon: "error",
+
+                        title: "Delete Failed",
+
+                        text:
+                            xhr.responseJSON?.detail ||
+                            "Failed to delete user."
+
+                    });
+
+                }
 
             });
 
-        }
+        });
+
+    }
 
 
-        // Update User Count
 
-        function updateUserCount() {
+    // =====================================================
+    // UPDATE USER COUNT
+    // =====================================================
 
-            const count =
-                document.querySelectorAll(
-                    "#userTable tr"
-                ).length;
+    function updateUserCount() {
 
-            document.getElementById(
-                "totalUsers"
-            ).innerText = count;
-
-            document.getElementById(
-                "activeUsers"
-            ).innerText = count;
-
-        }
+        const count =
+            $("#userTable tr").length;
 
 
-        // Sidebar
+        // Total users
 
-        function toggleSidebar() {
-
-            document
-                .getElementById("sidebar")
-                .classList.toggle("show");
-
-        }
+        $("#totalUsers").text(count);
 
 
-        // Logout
+        // Active users
 
-        function logout() {
+        $("#activeUsers").text(count);
 
-            if (confirm("Are you sure you want to logout?")) {
+    }
 
-                // Replace this with your logout URL
+
+
+    // =====================================================
+    // SIDEBAR
+    // =====================================================
+
+    function toggleSidebar() {
+
+        $("#sidebar").toggleClass("show");
+
+    }
+
+
+
+    // =====================================================
+    // LOGOUT
+    // =====================================================
+
+    function logout() {
+
+        Swal.fire({
+
+            title: "Are you sure?",
+
+            text: "You will be logged out of the admin panel.",
+
+            icon: "warning",
+
+            showCancelButton: true,
+
+            confirmButtonText: "Yes, Logout",
+
+            cancelButtonText: "Cancel",
+
+            reverseButtons: true
+
+        })
+
+
+        .then((result) => {
+
+            if (result.isConfirmed) {
 
                 window.location.href = "/logout/";
 
             }
 
-        }
+        });
 
-    </script>
+    }
+
+
+</script>
 
 </body>
 </html>

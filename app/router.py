@@ -142,3 +142,23 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
         "password":user.password,
         "is_staff": user.is_staff
     }
+
+
+@router_admin.delete("/admin/users/{user_id}")
+def delete_user(user_id: int, db: Session = Depends(get_db)):
+
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
+
+    db.delete(user)
+    db.commit()
+
+    return {
+        "message": "User deleted successfully",
+        "id": user_id
+    }
