@@ -111,19 +111,7 @@ def get_users(db: Session = Depends(get_db)):
         for user in users
     ]
 
-@router_admin.get("/admin/users")
-def get_users(db: Session = Depends(get_db)):
 
-    users = db.query(User).all()
-
-    return [
-        {
-            "id": user.id,
-            "username": user.username,
-            "is_staff": user.is_staff
-        }
-        for user in users
-    ]
 
 @router_admin.get("/admin/users/{user_id}")
 def get_user(user_id: int, db: Session = Depends(get_db)):
@@ -161,4 +149,45 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     return {
         "message": "User deleted successfully",
         "id": user_id
+    }
+
+@router_admin.put("/admin/users/{user_id}")
+def update_user(
+    user_id: int,
+    user_data: UserSchema,
+    db: Session = Depends(get_db)
+):
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
+
+    # Check if username is being changed
+    existing_user = db.query(User).filter(
+        User.username == user_data.username,
+        User.id != user_id
+    ).first()
+
+    if existing_user:
+        raise HTTPException(
+            status_code=400,
+            detail="Username already exists in DB"
+        )
+
+    # Update user
+    user.username = user_data.username
+    user.password = user_data.password
+    user.is_staff = user_data.is_staff
+
+    db.commit()
+    db.refresh(user)
+
+    return {
+        "message": "User updated successfully",
+        "id": user.id,
+        "username": user.username,
+        "is_staff": user.is_staff
     }
