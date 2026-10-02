@@ -62,7 +62,7 @@
             color: rgba(255, 255, 255, 0.9);
         }
 
-        input[type="name"],
+        input[type="text"],
         input[type="password"] {
             width: 100%;
             padding: 12px 14px;
@@ -76,7 +76,7 @@
             color: #ffffff;
         }
 
-        input[type="email"]:focus,
+        input[type="text"]:focus,
         input[type="password"]:focus {
             outline: none;
             border-color: rgba(255, 255, 255, 0.5);
@@ -197,32 +197,100 @@
 <body>
     <div class="login-container">
         <div class="login-header">
-            <h1>Welcome Back Admin  </h1>
+            <h1>Welcome Back Admin</h1>
             <p>Enter your credentials to access admin panel</p>
         </div>
 
-        <form>
-            <div class="form-group">
-                <label for="username">Name</label>
-                <input type="name" id="email" required>
-            </div>
+        <form id="loginForm">
 
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="username">
+            </div>
+        
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" placeholder="••••••••" required>
+                <input type="password"
+                       id="password"
+                       name="password"
+                       placeholder="••••••••">
             </div>
-
-           
-
-            <button type="submit" class="login-button">Sign In</button>
-
-          
+        
+            <button type="submit" class="login-button">
+                Sign In
+            </button>
+        
+            <div id="loginMessage"></div>
+        
         </form>
     </div>
 </body>
-</html>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
+
 <script>
-    const loginAdmin =()=>{
-        
-    }
+$(document).ready(function () {
+
+    $("#loginForm").validate({
+
+        rules: {
+            username: {
+                required: true,
+                minlength: 3
+            },
+            password: {
+                required: true,
+                minlength: 6
+            }
+        },
+
+        messages: {
+            username: {
+                required: "Please enter your name",
+                minlength: "Name must be at least 3 characters"
+            },
+            password: {
+                required: "Please enter your password",
+                minlength: "Password must be at least 6 characters"
+            }
+        },
+
+        submitHandler: function (form) {
+
+            $.ajax({
+                url: "/admin/login/credential/",
+                type: "POST",
+
+                data: {
+                    username: $("#name").val(),
+                    password: $("#password").val()
+                },
+
+                success: function (response) {
+                    console.log(response);
+
+                    if (response.success) {
+                        window.location.href = "/admin/";
+                    } else {
+                        $("#loginMessage").text(
+                            response.message || "Invalid credentials"
+                        );
+                    }
+                },
+
+                error: function (xhr) {
+                    console.log(xhr);
+                    $("#loginMessage").text(
+                        "Invalid username or password"
+                    );
+                }
+            });
+
+            return false;
+        }
+    });
+
+});
 </script>
