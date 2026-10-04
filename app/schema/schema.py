@@ -8,3 +8,12 @@ class UserSchema(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class Userlogindata(BaseModel):
+    id: int | None = None
+    username: str
+    password: str
+
+    class Config:
+        from_attributes = True

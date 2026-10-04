@@ -7,7 +7,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
 from models import User
-from schema.schema import UserSchema
+from schema.schema import UserSchema,Userlogindata
+from fastapi.responses import RedirectResponse
 
 
 router_frontend = APIRouter()
@@ -190,4 +191,27 @@ def update_user(
         "id": user.id,
         "username": user.username,
         "is_staff": user.is_staff
+    }
+
+@router_admin.post("/admin/login/credential/")
+def data_submit(
+    user: Userlogindata,
+    db: Session = Depends(get_db)
+):
+
+    existing_user = db.query(User).filter(
+        User.username == user.username,
+        User.password == user.password,
+        User.is_staff == True
+    ).first()
+
+    if existing_user:
+        return RedirectResponse(
+            url="/admin/",
+            status_code=303
+        )
+
+    return {
+        "success": False,
+        "message": "Invalid username or password"
     }
