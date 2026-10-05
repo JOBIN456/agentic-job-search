@@ -207,7 +207,7 @@ def data_submit(
 
     if existing_user:
         return RedirectResponse(
-            url="/admin/",
+            url="/admin/home",
             status_code=303
         )
 
