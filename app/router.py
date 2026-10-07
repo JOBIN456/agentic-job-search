@@ -9,6 +9,7 @@ from database import get_db
 from models import User
 from schema.schema import UserSchema,Userlogindata
 from fastapi.responses import RedirectResponse
+from fastapi import HTTPException
 
 
 router_frontend = APIRouter()
@@ -192,7 +193,6 @@ def update_user(
         "username": user.username,
         "is_staff": user.is_staff
     }
-
 @router_admin.post("/admin/login/credential/")
 def data_submit(
     user: Userlogindata,
@@ -211,7 +211,7 @@ def data_submit(
             status_code=303
         )
 
-    return {
-        "success": False,
-        "message": "Invalid username or password"
-    }
+    raise HTTPException(
+        status_code=401,
+        detail="Invalid username or password"
+    )

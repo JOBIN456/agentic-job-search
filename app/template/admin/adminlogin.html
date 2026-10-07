@@ -229,68 +229,82 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.21.0/dist/jquery.validate.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 $(document).ready(function () {
 
-    $("#loginForm").validate({
+$("#loginForm").validate({
 
-        rules: {
-            username: {
-                required: true,
-                minlength: 3
-            },
-            password: {
-                required: true,
-                minlength: 6
-            }
+    rules: {
+        username: {
+            required: true,
+            minlength: 3
         },
-
-        messages: {
-            username: {
-                required: "Please enter your name",
-                minlength: "Name must be at least 3 characters"
-            },
-            password: {
-                required: "Please enter your password",
-                minlength: "Password must be at least 6 characters"
-            }
-        },
-
-        submitHandler: function (form) {
-
-            $.ajax({
-                url: "/admin/login/credential/",
-                type: "POST",
-
-                data: {
-                    username: $("#name").val(),
-                    password: $("#password").val()
-                },
-
-                success: function (response) {
-                    console.log(response);
-
-                    if (response.success) {
-                        window.location.href = "/admin/";
-                    } else {
-                        $("#loginMessage").text(
-                            response.message || "Invalid credentials"
-                        );
-                    }
-                },
-
-                error: function (xhr) {
-                    console.log(xhr);
-                    $("#loginMessage").text(
-                        "Invalid username or password"
-                    );
-                }
-            });
-
-            return false;
+        password: {
+            required: true,
+            minlength: 6
         }
+    },
+
+    messages: {
+        username: {
+            required: "Please enter your name",
+            minlength: "Name must be at least 3 characters"
+        },
+        password: {
+            required: "Please enter your password",
+            minlength: "Password must be at least 6 characters"
+        }
+    },
+
+    submitHandler: function (form) {
+
+        $.ajax({
+            url: "/admin/login/credential/",
+            type: "POST",
+            contentType: "application/json",
+
+            data: JSON.stringify({
+                username: $("#name").val(),
+                password: $("#password").val()
+            }),
+
+            success: function (response) {
+
+Swal.fire({
+    icon: "success",
+    title: "Login Successful",
+    text: "Welcome back!"
+});
+
+},
+
+error: function (xhr) {
+
+if (xhr.status === 401) {
+
+    Swal.fire({
+        icon: "error",
+        title: "Login Failed",
+        text: "Invalid username or password"
     });
 
+} else {
+
+    Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong. Please try again."
+    });
+}
+}
+        });
+
+        return false;
+    }
 });
+
+});
+
+
 </script>
