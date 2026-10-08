@@ -206,11 +206,7 @@ def data_submit(
     ).first()
 
     if existing_user:
-        return RedirectResponse(
-            url="/admin/home",
-            status_code=303
-        )
-
+        return {"success": True, "redirect_url": "/admin/home"}
     raise HTTPException(
         status_code=401,
         detail="Invalid username or password"
