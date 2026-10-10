@@ -10,6 +10,7 @@ from models import User
 from schema.schema import UserSchema,Userlogindata
 from fastapi.responses import RedirectResponse
 from fastapi import HTTPException
+from sqlalchemy.orm import Session
 
 
 router_frontend = APIRouter()
@@ -72,6 +73,33 @@ def admin_home_page(request: Request):
 
 
 # ADMIN LOGIC
+
+
+def require_admin(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    user_id = request.session.get("user_id")
+
+    if not user_id:
+        raise HTTPException(
+            status_code=401,
+            detail="Please log in first"
+        )
+
+    user = db.query(User).filter(
+        User.id == user_id,
+        User.is_staff == True
+    ).first()
+
+    if not user:
+        request.session.clear()
+        raise HTTPException(
+            status_code=403,
+            detail="Admin access required"
+        )
+
+    return user
 @router_admin.post("/admin/data_submit", response_model=UserSchema)
 def data_submit(user: UserSchema, db: Session = Depends(get_db)):
 
@@ -193,12 +221,13 @@ def update_user(
         "username": user.username,
         "is_staff": user.is_staff
     }
+
 @router_admin.post("/admin/login/credential/")
 def data_submit(
+    request: Request,
     user: Userlogindata,
     db: Session = Depends(get_db)
 ):
-
     existing_user = db.query(User).filter(
         User.username == user.username,
         User.password == user.password,
@@ -206,7 +235,13 @@ def data_submit(
     ).first()
 
     if existing_user:
-        return {"success": True, "redirect_url": "/admin/home"}
+        request.session["user_id"] = existing_user.id
+
+        return {
+            "success": True,
+            "redirect_url": "/admin/home"
+        }
+
     raise HTTPException(
         status_code=401,
         detail="Invalid username or password"
