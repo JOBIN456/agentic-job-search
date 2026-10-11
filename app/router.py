@@ -19,6 +19,32 @@ router_admin= APIRouter()
 
 templates = Jinja2Templates(directory="template")
 
+
+def require_admin(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    user_id = request.session.get("user_id")
+
+    if not user_id:
+        raise HTTPException(
+            status_code=401,
+            detail="Please log in first"
+        )
+
+    user = db.query(User).filter(
+        User.id == user_id,
+        User.is_staff == True
+    ).first()
+
+    if not user:
+        request.session.clear()
+        raise HTTPException(
+            status_code=403,
+            detail="Admin access required"
+        )
+
+    return user
 @router_frontend.get("/")
 def home_page(request: Request):
     return templates.TemplateResponse(
@@ -62,7 +88,7 @@ def admin_login_page(request: Request):
 
 
 @router_frontend.get("/admin/home")
-def admin_home_page(request: Request):
+def admin_home_page(request: Request,admin: User = Depends(require_admin)):
     return templates.TemplateResponse(
         request=request,
         name="admin/adminhome.html",
@@ -75,31 +101,7 @@ def admin_home_page(request: Request):
 # ADMIN LOGIC
 
 
-def require_admin(
-    request: Request,
-    db: Session = Depends(get_db)
-):
-    user_id = request.session.get("user_id")
 
-    if not user_id:
-        raise HTTPException(
-            status_code=401,
-            detail="Please log in first"
-        )
-
-    user = db.query(User).filter(
-        User.id == user_id,
-        User.is_staff == True
-    ).first()
-
-    if not user:
-        request.session.clear()
-        raise HTTPException(
-            status_code=403,
-            detail="Admin access required"
-        )
-
-    return user
 @router_admin.post("/admin/data_submit", response_model=UserSchema)
 def data_submit(user: UserSchema, db: Session = Depends(get_db)):
 
