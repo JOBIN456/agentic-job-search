@@ -100,7 +100,13 @@ def admin_home_page(request: Request,admin: User = Depends(require_admin)):
 
 # ADMIN LOGIC
 
-
+@router_frontend.get("/logout")
+def logout(request: Request):
+    request.session.clear()
+    return RedirectResponse(
+        url="/user_login",
+        status_code=303
+    )
 
 @router_admin.post("/admin/data_submit", response_model=UserSchema)
 def data_submit(user: UserSchema, db: Session = Depends(get_db)):
