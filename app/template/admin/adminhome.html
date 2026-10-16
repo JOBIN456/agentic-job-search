@@ -1267,36 +1267,36 @@
 
     function logout() {
 
-        Swal.fire({
+Swal.fire({
 
-            title: "Are you sure?",
+    title: "Are you sure?",
 
-            text: "You will be logged out of the admin panel.",
+    text: "You will be logged out of the admin panel.",
 
-            icon: "warning",
+    icon: "warning",
 
-            showCancelButton: true,
+    showCancelButton: true,
 
-            confirmButtonText: "Yes, Logout",
+    confirmButtonText: "Yes, Logout",
 
-            cancelButtonText: "Cancel",
+    cancelButtonText: "Cancel",
 
-            reverseButtons: true
+    reverseButtons: true
 
-        })
+})
 
 
-        .then((result) => {
+.then((result) => {
 
-            if (result.isConfirmed) {
+    if (result.isConfirmed) {
 
-                window.location.href = "/logout/";
-
-            }
-
-        });
+        window.location.href = "/logout/";
 
     }
+
+});
+
+}
 
 
 </script>
