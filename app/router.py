@@ -105,8 +105,8 @@ def logout(request: Request):
     request.session.clear()
     return RedirectResponse(
         url="/user_login",
-        status_code=303
-    )
+        status_code=302
+    )   
 
 @router_admin.post("/admin/data_submit", response_model=UserSchema)
 def data_submit(user: UserSchema, db: Session = Depends(get_db)):
