@@ -129,6 +129,12 @@
             transform: scale(1.01);
         }
 
+        .drag-drop-area.file-error {
+            border-color: #ff6b81 !important;
+            background: rgba(255, 107, 129, 0.08) !important;
+            box-shadow: 0 0 14px rgba(255, 107, 129, 0.25) !important;
+        }
+
         @media (hover: hover) {
             .drag-drop-area:hover {
                 background: rgba(255, 255, 255, 0.1);
@@ -213,7 +219,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-bottom: 28px;
+            margin-bottom: 24px;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -251,6 +257,12 @@
             font-size: 13.5px;
             font-weight: 600;
             margin-bottom: 6px;
+        }
+
+        .required-star {
+            color: #ff6b81;
+            margin-left: 3px;
+            font-weight: 700;
         }
 
         .form-section input,
@@ -407,6 +419,45 @@
             }
         }
 
+        /* ================= jQuery Validator Styles ================= */
+        label.error {
+            color: #ff6b81;
+            font-size: 12.5px;
+            font-weight: 500;
+            margin-top: 6px;
+            display: block;
+            animation: fadeInError 0.2s ease-in-out;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+            letter-spacing: 0.2px;
+        }
+
+        @keyframes fadeInError {
+            from {
+                opacity: 0;
+                transform: translateY(-3px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Highlight invalid form inputs */
+        .form-section input.error,
+        .form-section select.error,
+        .form-section textarea.error {
+            border-color: #ff6b81 !important;
+            background: rgba(255, 107, 129, 0.12) !important;
+            box-shadow: 0 0 10px rgba(255, 107, 129, 0.35) !important;
+        }
+
+        /* Subtle valid field indicator */
+        .form-section input.valid:not([type="file"]),
+        .form-section select.valid,
+        .form-section textarea.valid {
+            border-color: rgba(76, 175, 80, 0.65);
+        }
+
         /* Responsive Breakpoints */
         @media (max-width: 640px) {
             body {
@@ -434,7 +485,7 @@
             }
 
             .btn-upload {
-                margin-bottom: 22px;
+                margin-bottom: 20px;
             }
 
             .bg-blob {
@@ -492,7 +543,7 @@
         </div>
 
         <!-- Form -->
-        <form id="profileForm">
+        <form id="profileForm" novalidate="novalidate">
             <!-- Drag and Drop Area -->
             <div class="drag-drop-area" id="dragDropArea">
                 <div class="drag-drop-icon">📁</div>
@@ -511,34 +562,34 @@
             <!-- Upload Button -->
             <button type="button" class="btn-upload" id="browseBtn">Browse Files</button>
 
-            <!-- Hidden File Input -->
-            <input type="file" id="cv-file" accept=".pdf,.doc,.docx" style="display: none;">
+            <!-- Hidden File Input (Validated by jQuery Validator) -->
+            <input type="file" id="cv-file" name="cvFile" accept=".pdf,.doc,.docx" style="display: none;">
 
             <!-- Form Fields -->
             <div class="form-section">
-                <label for="fullName">Full Name</label>
-                <input type="text" id="fullName" placeholder="Enter your full name" required>
+                <label for="fullName">Full Name <span class="required-star">*</span></label>
+                <input type="text" id="fullName" name="fullName" placeholder="Enter your full name">
             </div>
 
             <div class="form-row">
                 <div class="form-section">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" placeholder="your@email.com" required>
+                    <label for="email">Email Address <span class="required-star">*</span></label>
+                    <input type="email" id="email" name="email" placeholder="your@email.com">
                 </div>
                 <div class="form-section">
                     <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" placeholder="+1 (555) 000-0000">
+                    <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000">
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-section">
                     <label for="location">Location</label>
-                    <input type="text" id="location" placeholder="City, Country">
+                    <input type="text" id="location" name="location" placeholder="City, Country">
                 </div>
                 <div class="form-section">
-                    <label for="experience">Years of Experience</label>
-                    <select id="experience" required>
+                    <label for="experience">Years of Experience <span class="required-star">*</span></label>
+                    <select id="experience" name="experience">
                         <option value="">Select...</option>
                         <option value="0-1">0-1 Years</option>
                         <option value="1-3">1-3 Years</option>
@@ -551,22 +602,22 @@
 
             <div class="form-section">
                 <label for="jobTitle">Desired Job Title</label>
-                <input type="text" id="jobTitle" placeholder="e.g., Software Engineer, Product Manager">
+                <input type="text" id="jobTitle" name="jobTitle" placeholder="e.g., Software Engineer, Product Manager">
             </div>
 
             <!-- API Keys Section -->
             <div class="form-row">
                 <div class="form-section">
-                    <label for="apifyKey">Apify Key</label>
+                    <label for="apifyKey">Apify Key <span class="required-star">*</span></label>
                     <div class="input-password-wrapper">
-                        <input type="password" id="apifyKey" placeholder="Enter your Apify key" autocomplete="off">
+                        <input type="password" id="apifyKey" name="apifyKey" placeholder="Enter your Apify key" autocomplete="off">
                         <button type="button" class="btn-toggle-key" onclick="toggleKeyVisibility('apifyKey', this)" aria-label="Toggle Apify key visibility" title="Show/Hide Key">👁️</button>
                     </div>
                 </div>
                 <div class="form-section">
-                    <label for="groqKey">Groq LLM Key</label>
+                    <label for="groqKey">Groq LLM Key <span class="required-star">*</span></label>
                     <div class="input-password-wrapper">
-                        <input type="password" id="groqKey" placeholder="Enter your Groq LLM key" autocomplete="off">
+                        <input type="password" id="groqKey" name="groqKey" placeholder="Enter your Groq LLM key" autocomplete="off">
                         <button type="button" class="btn-toggle-key" onclick="toggleKeyVisibility('groqKey', this)" aria-label="Toggle Groq key visibility" title="Show/Hide Key">👁️</button>
                     </div>
                 </div>
@@ -574,7 +625,7 @@
 
             <div class="form-section">
                 <label for="bio">Professional Summary</label>
-                <textarea id="bio" rows="4" placeholder="Tell us about yourself and your career goals..."></textarea>
+                <textarea id="bio" name="bio" rows="4" placeholder="Tell us about yourself and your career goals..."></textarea>
             </div>
 
             <!-- Submit Button -->
@@ -582,15 +633,12 @@
         </form>
     </div>
 
-    <script>
-        const dragDropArea = document.getElementById('dragDropArea');
-        const cvFileInput = document.getElementById('cv-file');
-        const browseBtn = document.getElementById('browseBtn');
-        const fileInfo = document.getElementById('fileInfo');
-        const fileName = document.getElementById('fileName');
-        const form = document.getElementById('profileForm');
-        const successMessage = document.getElementById('successMessage');
+    <!-- Scripts: jQuery & jQuery Validation Library -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.21.0/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.21.0/dist/additional-methods.min.js"></script>
 
+    <script>
         // Toggle API Key visibility
         function toggleKeyVisibility(inputId, btn) {
             const input = document.getElementById(inputId);
@@ -606,109 +654,251 @@
             }
         }
 
-        // Browse button click
-        browseBtn.addEventListener('click', () => {
-            cvFileInput.click();
-        });
+        $(document).ready(function () {
+            const dragDropArea = document.getElementById('dragDropArea');
+            const cvFileInput = document.getElementById('cv-file');
+            const browseBtn = document.getElementById('browseBtn');
+            const fileInfo = document.getElementById('fileInfo');
+            const fileName = document.getElementById('fileName');
 
-        // File input change
-        cvFileInput.addEventListener('change', handleFileSelect);
-
-        // Drag and drop events
-        dragDropArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dragDropArea.classList.add('dragover');
-        });
-
-        dragDropArea.addEventListener('dragleave', () => {
-            dragDropArea.classList.remove('dragover');
-        });
-
-        dragDropArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dragDropArea.classList.remove('dragover');
-            
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                const file = files[0];
-                if (validateFile(file)) {
-                    cvFileInput.files = files;
-                    handleFileSelect();
-                }
-            }
-        });
-
-        // File validation
-        function validateFile(file) {
-            const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-            
-            if (!validTypes.includes(file.type)) {
-                alert('Please upload a PDF or Word document');
-                return false;
-            }
-
-            if (file.size > 5 * 1024 * 1024) { // 5MB limit
-                alert('File size should not exceed 5MB');
-                return false;
-            }
-
-            return true;
-        }
-
-        // Handle file selection
-        function handleFileSelect() {
-            if (cvFileInput.files.length > 0) {
-                const file = cvFileInput.files[0];
-                fileName.textContent = `📄 ${file.name}`;
-                fileInfo.classList.add('show');
-                dragDropArea.style.opacity = '0.5';
-            }
-        }
-
-        // Form submission
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            // Validate required fields
-            if (!cvFileInput.files.length) {
-                alert('Please upload your CV');
-                return;
-            }
-
-            if (!document.getElementById('fullName').value) {
-                alert('Please enter your full name');
-                return;
-            }
-
-            if (!document.getElementById('email').value) {
-                alert('Please enter your email');
-                return;
-            }
-
-            // Log form data (in real app, send to server)
-            console.log({
-                cv: cvFileInput.files[0].name,
-                fullName: document.getElementById('fullName').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                location: document.getElementById('location').value,
-                experience: document.getElementById('experience').value,
-                jobTitle: document.getElementById('jobTitle').value,
-                apifyKey: document.getElementById('apifyKey').value,
-                groqKey: document.getElementById('groqKey').value,
-                bio: document.getElementById('bio').value
+            // Browse button click
+            browseBtn.addEventListener('click', () => {
+                cvFileInput.click();
             });
 
-            // Show success message
-            successMessage.classList.add('show');
+            // Drag and Drop Area click to browse
+            dragDropArea.addEventListener('click', () => {
+                cvFileInput.click();
+            });
 
-            // Reset form after 2 seconds
-            setTimeout(() => {
-                form.reset();
-                fileInfo.classList.remove('show');
-                dragDropArea.style.opacity = '1';
-                successMessage.classList.remove('show');
-            }, 2000);
+            // Drag and drop events
+            dragDropArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dragDropArea.classList.add('dragover');
+            });
+
+            dragDropArea.addEventListener('dragleave', () => {
+                dragDropArea.classList.remove('dragover');
+            });
+
+            dragDropArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dragDropArea.classList.remove('dragover');
+
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    cvFileInput.files = files;
+                    handleFileSelect();
+                    // Trigger jQuery Validator for the file
+                    $(cvFileInput).valid();
+                }
+            });
+
+            // File input change
+            cvFileInput.addEventListener('change', () => {
+                handleFileSelect();
+                // Trigger jQuery Validator for the file
+                $(cvFileInput).valid();
+            });
+
+            // Handle file selection preview
+            function handleFileSelect() {
+                if (cvFileInput.files.length > 0) {
+                    const file = cvFileInput.files[0];
+                    const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                    fileName.textContent = `📄 ${file.name} (${sizeMB} MB)`;
+                    fileInfo.classList.add('show');
+                    dragDropArea.style.opacity = '0.65';
+                } else {
+                    fileInfo.classList.remove('show');
+                    dragDropArea.style.opacity = '1';
+                }
+            }
+
+            // ==========================================
+            // Custom jQuery Validator Methods
+            // ==========================================
+
+            // Validate file extension (.pdf, .doc, .docx)
+            $.validator.addMethod("cvExtension", function (value, element) {
+                if (this.optional(element) || !element.files || !element.files.length) {
+                    return true;
+                }
+                const ext = element.files[0].name.split('.').pop().toLowerCase();
+                return ['pdf', 'doc', 'docx'].indexOf(ext) !== -1;
+            }, "Please upload a valid PDF or Word document (.pdf, .doc, .docx)");
+
+            // Validate file size (max 5MB)
+            $.validator.addMethod("cvFileSize", function (value, element, param) {
+                if (this.optional(element) || !element.files || !element.files.length) {
+                    return true;
+                }
+                return element.files[0].size <= param;
+            }, "File size must not exceed 5MB");
+
+            // Validate phone number format (optional, but validated if filled)
+            $.validator.addMethod("customPhone", function (value, element) {
+                return this.optional(element) || /^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]{6,15}$/.test(value.trim());
+            }, "Please enter a valid phone number");
+
+            // ==========================================
+            // jQuery Validation Initialization
+            // ==========================================
+            const validator = $("#profileForm").validate({
+                // Allow validation of the hidden cvFile input
+                ignore: ":hidden:not(#cv-file)",
+
+                // Validate on user action
+                onfocusout: function (element) {
+                    $(element).valid();
+                },
+                onkeyup: function (element) {
+                    $(element).valid();
+                },
+
+                // Validation Rules
+                rules: {
+                    cvFile: {
+                        required: true,
+                        cvExtension: true,
+                        cvFileSize: 5 * 1024 * 1024 // 5MB
+                    },
+                    fullName: {
+                        required: true,
+                        minlength: 2
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    phone: {
+                        customPhone: true
+                    },
+                    location: {
+                        minlength: 2
+                    },
+                    experience: {
+                        required: true
+                    },
+                    jobTitle: {
+                        minlength: 2
+                    },
+                    apifyKey: {
+                        required: true,
+                        minlength: 8
+                    },
+                    groqKey: {
+                        required: true,
+                        minlength: 8
+                    },
+                    bio: {
+                        minlength: 10
+                    }
+                },
+
+                // Custom Error Messages
+                messages: {
+                    cvFile: {
+                        required: "Please upload your CV before submitting",
+                        cvExtension: "Only .pdf, .doc, and .docx formats are supported",
+                        cvFileSize: "File size exceeds the 5MB limit"
+                    },
+                    fullName: {
+                        required: "Please enter your full name",
+                        minlength: "Full name must be at least 2 characters long"
+                    },
+                    email: {
+                        required: "Please enter your email address",
+                        email: "Please enter a valid email address (e.g., name@example.com)"
+                    },
+                    phone: {
+                        customPhone: "Please enter a valid phone number"
+                    },
+                    location: {
+                        minlength: "Location must be at least 2 characters long"
+                    },
+                    experience: {
+                        required: "Please select your years of experience"
+                    },
+                    jobTitle: {
+                        minlength: "Desired job title must be at least 2 characters long"
+                    },
+                    apifyKey: {
+                        required: "Please enter your Apify key",
+                        minlength: "Apify key must be at least 8 characters long"
+                    },
+                    groqKey: {
+                        required: "Please enter your Groq LLM key",
+                        minlength: "Groq LLM key must be at least 8 characters long"
+                    },
+                    bio: {
+                        minlength: "Professional summary should be at least 10 characters long"
+                    }
+                },
+
+                // Precise Error Placement
+                errorPlacement: function (error, element) {
+                    if (element.attr("name") === "cvFile") {
+                        error.insertAfter("#browseBtn");
+                    } else if (element.parent(".input-password-wrapper").length) {
+                        error.insertAfter(element.parent(".input-password-wrapper"));
+                    } else {
+                        error.insertAfter(element);
+                    }
+                },
+
+                // Error highlighting
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass(errorClass).removeClass(validClass);
+                    if ($(element).attr('id') === 'cv-file') {
+                        $('#dragDropArea').addClass('file-error');
+                    }
+                },
+
+                // Error un-highlighting
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass(errorClass).addClass(validClass);
+                    if ($(element).attr('id') === 'cv-file') {
+                        $('#dragDropArea').removeClass('file-error');
+                    }
+                },
+
+                // Successful Form Submission
+                submitHandler: function (form) {
+                    const formData = {
+                        cv: cvFileInput.files[0] ? cvFileInput.files[0].name : '',
+                        fullName: $('#fullName').val().trim(),
+                        email: $('#email').val().trim(),
+                        phone: $('#phone').val().trim(),
+                        location: $('#location').val().trim(),
+                        experience: $('#experience').val(),
+                        jobTitle: $('#jobTitle').val().trim(),
+                        apifyKey: $('#apifyKey').val().trim(),
+                        groqKey: $('#groqKey').val().trim(),
+                        bio: $('#bio').val().trim()
+                    };
+
+                    console.log("Validated Form Submission:", formData);
+
+                    // Show success banner
+                    const $success = $('#successMessage');
+                    $success.addClass('show');
+
+                    // Reset form after 2.5 seconds
+                    setTimeout(() => {
+                        form.reset();
+                        $('#fileInfo').removeClass('show');
+                        $('#dragDropArea').css('opacity', '1').removeClass('file-error');
+                        $success.removeClass('show');
+
+                        // Reset validator states
+                        validator.resetForm();
+                        $('#profileForm').find('.valid, .error').removeClass('valid error');
+                    }, 2500);
+
+                    return false;
+                }
+            });
         });
     </script>
 </body>
