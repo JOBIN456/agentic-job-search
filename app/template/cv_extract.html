@@ -12,11 +12,6 @@
             box-sizing: border-box;
         }
 
-        html {
-            -webkit-text-size-adjust: 100%;
-            scroll-behavior: smooth;
-        }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
@@ -26,10 +21,6 @@
             justify-content: center;
             align-items: center;
             padding: 24px 16px;
-            padding-top: max(24px, env(safe-area-inset-top));
-            padding-bottom: max(24px, env(safe-area-inset-bottom));
-            padding-left: max(16px, env(safe-area-inset-left));
-            padding-right: max(16px, env(safe-area-inset-right));
             position: relative;
             overflow-x: hidden;
             color: #ffffff;
@@ -43,8 +34,6 @@
             opacity: 0.35;
             z-index: 0;
             pointer-events: none;
-            max-width: 80vw;
-            max-height: 80vw;
         }
 
         .blob-1 {
@@ -66,12 +55,8 @@
         }
 
         @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(30px);
-            }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(30px); }
         }
 
         /* Main Container */
@@ -93,81 +78,51 @@
         /* Header */
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 28px;
         }
 
         .header h1 {
             color: #ffffff;
             font-size: clamp(1.5rem, 4vw + 0.5rem, 2rem);
-            font-weight: 700;
             margin-bottom: 8px;
-            line-height: 1.25;
         }
 
         .header p {
             color: rgba(255, 255, 255, 0.85);
             font-size: clamp(0.85rem, 1.5vw + 0.5rem, 0.95rem);
-            line-height: 1.4;
         }
 
         /* Drag and Drop Area */
         .drag-drop-area {
             border: 2px dashed rgba(255, 255, 255, 0.5);
             border-radius: 14px;
-            padding: 36px 20px;
+            padding: 32px 20px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
             margin-bottom: 16px;
             background: rgba(255, 255, 255, 0.05);
-            -webkit-tap-highlight-color: transparent;
         }
 
         .drag-drop-area.dragover {
             background: rgba(102, 126, 234, 0.3);
             border-color: rgba(255, 255, 255, 0.9);
-            transform: scale(1.01);
-        }
-
-        .drag-drop-area.file-error {
-            border-color: #ff6b81 !important;
-            background: rgba(255, 107, 129, 0.08) !important;
-            box-shadow: 0 0 14px rgba(255, 107, 129, 0.25) !important;
-        }
-
-        @media (hover: hover) {
-            .drag-drop-area:hover {
-                background: rgba(255, 255, 255, 0.1);
-                border-color: rgba(255, 255, 255, 0.85);
-            }
         }
 
         .drag-drop-icon {
-            font-size: clamp(38px, 6vw, 48px);
-            margin-bottom: 12px;
-            animation: bounce 2s ease-in-out infinite;
-            display: inline-block;
-        }
-
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-8px);
-            }
+            font-size: 42px;
+            margin-bottom: 10px;
         }
 
         .drag-drop-text h3 {
             color: #ffffff;
-            font-size: clamp(0.95rem, 2vw + 0.4rem, 1.15rem);
-            margin-bottom: 6px;
-            font-weight: 600;
+            font-size: 17px;
+            margin-bottom: 5px;
         }
 
         .drag-drop-text p {
             color: rgba(255, 255, 255, 0.75);
-            font-size: clamp(0.75rem, 1.5vw + 0.4rem, 0.85rem);
+            font-size: 13px;
         }
 
         #cv-file {
@@ -179,30 +134,23 @@
             background: rgba(76, 175, 80, 0.2);
             border: 1px solid rgba(76, 175, 80, 0.5);
             border-radius: 10px;
-            padding: 12px 14px;
+            padding: 10px 14px;
             margin-bottom: 16px;
             color: #ffffff;
             font-size: 14px;
             display: none;
             align-items: center;
             gap: 10px;
-            min-width: 0;
         }
 
         .file-info.show {
             display: flex;
         }
 
-        .file-info-icon {
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-
         #fileName {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            min-width: 0;
             flex: 1;
         }
 
@@ -219,19 +167,11 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-bottom: 24px;
-            -webkit-tap-highlight-color: transparent;
+            margin-bottom: 22px;
         }
 
-        @media (hover: hover) {
-            .btn-upload:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-            }
-        }
-
-        .btn-upload:active {
-            transform: translateY(0);
+        .btn-upload:hover {
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
 
         /* Form Layout */
@@ -239,12 +179,11 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 16px;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
         .form-section {
-            margin-bottom: 18px;
-            position: relative;
+            margin-bottom: 16px;
         }
 
         .form-row .form-section {
@@ -261,8 +200,7 @@
 
         .required-star {
             color: #ff6b81;
-            margin-left: 3px;
-            font-weight: 700;
+            margin-left: 2px;
         }
 
         .form-section input,
@@ -270,7 +208,7 @@
         .form-section textarea {
             width: 100%;
             min-height: 44px;
-            padding: 11px 14px;
+            padding: 10px 14px;
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 10px;
             background: rgba(255, 255, 255, 0.1);
@@ -280,8 +218,7 @@
             transition: all 0.25s ease;
         }
 
-        /* Prevent auto zoom on iOS Safari */
-        @media screen and (max-width: 768px) {
+        @media (max-width: 768px) {
             .form-section input,
             .form-section select,
             .form-section textarea {
@@ -300,11 +237,6 @@
             outline: none;
             background: rgba(255, 255, 255, 0.15);
             border-color: rgba(255, 255, 255, 0.7);
-            box-shadow: 0 0 12px rgba(102, 126, 234, 0.4);
-        }
-
-        .form-section select {
-            cursor: pointer;
         }
 
         .form-section select option {
@@ -313,18 +245,14 @@
         }
 
         .form-section textarea {
-            min-height: 90px;
+            min-height: 85px;
             resize: vertical;
-            max-width: 100%;
-            line-height: 1.5;
         }
 
-        /* Password / Key toggle wrapper */
+        /* Password Wrapper */
         .input-password-wrapper {
             position: relative;
             width: 100%;
-            display: flex;
-            align-items: center;
         }
 
         .input-password-wrapper input {
@@ -336,36 +264,24 @@
             right: 8px;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: #ffffff;
             cursor: pointer;
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border-radius: 6px;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .btn-toggle-key:hover {
-            background: rgba(255, 255, 255, 0.22);
-            color: #ffffff;
-        }
-
-        .btn-toggle-key:active {
-            transform: translateY(-50%) scale(0.95);
+            font-size: 13px;
         }
 
         /* Submit Button */
         .btn-submit {
             width: 100%;
             min-height: 48px;
-            padding: 14px 28px;
+            padding: 13px 28px;
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             color: white;
             border: none;
@@ -375,87 +291,42 @@
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 10px;
-            -webkit-tap-highlight-color: transparent;
         }
 
-        @media (hover: hover) {
-            .btn-submit:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 5px 20px rgba(245, 87, 108, 0.45);
-            }
-        }
-
-        .btn-submit:active {
-            transform: translateY(0);
+        .btn-submit:hover {
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
         }
 
         /* Success Message */
         .success-message {
-            background: rgba(76, 175, 80, 0.2);
-            border: 1px solid rgba(76, 175, 80, 0.5);
+            background: rgba(76, 175, 80, 0.25);
+            border: 1px solid rgba(76, 175, 80, 0.6);
             color: #ffffff;
-            padding: 14px;
+            padding: 12px;
             border-radius: 10px;
             text-align: center;
             display: none;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             font-size: 14.5px;
-            word-break: break-word;
         }
 
         .success-message.show {
             display: block;
-            animation: slideIn 0.3s ease;
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ================= jQuery Validator Styles ================= */
+        /* Validation Error Styles */
         label.error {
             color: #ff6b81;
-            font-size: 12.5px;
+            font-size: 12px;
             font-weight: 500;
-            margin-top: 6px;
+            margin-top: 4px;
             display: block;
-            animation: fadeInError 0.2s ease-in-out;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
-            letter-spacing: 0.2px;
         }
 
-        @keyframes fadeInError {
-            from {
-                opacity: 0;
-                transform: translateY(-3px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Highlight invalid form inputs */
         .form-section input.error,
-        .form-section select.error,
-        .form-section textarea.error {
+        .form-section select.error {
             border-color: #ff6b81 !important;
-            background: rgba(255, 107, 129, 0.12) !important;
-            box-shadow: 0 0 10px rgba(255, 107, 129, 0.35) !important;
-        }
-
-        /* Subtle valid field indicator */
-        .form-section input.valid:not([type="file"]),
-        .form-section select.valid,
-        .form-section textarea.valid {
-            border-color: rgba(76, 175, 80, 0.65);
+            background: rgba(255, 107, 129, 0.1) !important;
         }
 
         /* Responsive Breakpoints */
@@ -465,61 +336,17 @@
             }
 
             .container {
-                padding: 30px 18px;
+                padding: 28px 18px;
                 border-radius: 18px;
-            }
-
-            .header {
-                margin-bottom: 24px;
             }
 
             .form-row {
                 grid-template-columns: 1fr;
                 gap: 16px;
-                margin-bottom: 16px;
             }
 
             .drag-drop-area {
-                padding: 30px 16px;
-                margin-bottom: 14px;
-            }
-
-            .btn-upload {
-                margin-bottom: 20px;
-            }
-
-            .bg-blob {
-                filter: blur(60px);
-                opacity: 0.3;
-            }
-
-            .blob-1 {
-                width: 200px;
-                height: 200px;
-            }
-
-            .blob-2 {
-                width: 180px;
-                height: 180px;
-            }
-        }
-
-        @media (max-width: 380px) {
-            body {
-                padding: 12px 8px;
-            }
-
-            .container {
-                padding: 22px 14px;
-                border-radius: 14px;
-            }
-
-            .drag-drop-area {
-                padding: 24px 12px;
-            }
-
-            .form-section label {
-                font-size: 13px;
+                padding: 26px 16px;
             }
         }
     </style>
@@ -543,7 +370,7 @@
         </div>
 
         <!-- Form -->
-        <form id="profileForm" novalidate="novalidate">
+        <form id="profileForm">
             <!-- Drag and Drop Area -->
             <div class="drag-drop-area" id="dragDropArea">
                 <div class="drag-drop-icon">📁</div>
@@ -555,15 +382,13 @@
 
             <!-- File Info -->
             <div class="file-info" id="fileInfo">
-                <div class="file-info-icon">✓</div>
+                <div>✓</div>
                 <div id="fileName"></div>
             </div>
 
-            <!-- Upload Button -->
+            <!-- Browse Button -->
             <button type="button" class="btn-upload" id="browseBtn">Browse Files</button>
-
-            <!-- Hidden File Input (Validated by jQuery Validator) -->
-            <input type="file" id="cv-file" name="cvFile" accept=".pdf,.doc,.docx" style="display: none;">
+            <input type="file" id="cv-file" accept=".pdf,.doc,.docx">
 
             <!-- Form Fields -->
             <div class="form-section">
@@ -602,7 +427,7 @@
 
             <div class="form-section">
                 <label for="jobTitle">Desired Job Title</label>
-                <input type="text" id="jobTitle" name="jobTitle" placeholder="e.g., Software Engineer, Product Manager">
+                <input type="text" id="jobTitle" name="jobTitle" placeholder="e.g., Software Engineer">
             </div>
 
             <!-- API Keys Section -->
@@ -611,292 +436,163 @@
                     <label for="apifyKey">Apify Key <span class="required-star">*</span></label>
                     <div class="input-password-wrapper">
                         <input type="password" id="apifyKey" name="apifyKey" placeholder="Enter your Apify key" autocomplete="off">
-                        <button type="button" class="btn-toggle-key" onclick="toggleKeyVisibility('apifyKey', this)" aria-label="Toggle Apify key visibility" title="Show/Hide Key">👁️</button>
+                        <button type="button" class="btn-toggle-key" onclick="toggleKeyVisibility('apifyKey', this)" title="Show/Hide">👁️</button>
                     </div>
                 </div>
                 <div class="form-section">
                     <label for="groqKey">Groq LLM Key <span class="required-star">*</span></label>
                     <div class="input-password-wrapper">
-                        <input type="password" id="groqKey" name="groqKey" placeholder="Enter your Groq LLM key" autocomplete="off">
-                        <button type="button" class="btn-toggle-key" onclick="toggleKeyVisibility('groqKey', this)" aria-label="Toggle Groq key visibility" title="Show/Hide Key">👁️</button>
+                        <input type="password" id="groqKey" name="groqKey" placeholder="Enter your Groq key" autocomplete="off">
+                        <button type="button" class="btn-toggle-key" onclick="toggleKeyVisibility('groqKey', this)" title="Show/Hide">👁️</button>
                     </div>
                 </div>
             </div>
 
             <div class="form-section">
                 <label for="bio">Professional Summary</label>
-                <textarea id="bio" name="bio" rows="4" placeholder="Tell us about yourself and your career goals..."></textarea>
+                <textarea id="bio" name="bio" rows="3" placeholder="Tell us about yourself..."></textarea>
             </div>
 
-            <!-- Submit Button -->
             <button type="submit" class="btn-submit">Submit Profile</button>
         </form>
     </div>
 
-    <!-- Scripts: jQuery & jQuery Validation Library -->
+    <!-- jQuery & jQuery Validation -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.21.0/dist/jquery.validate.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.21.0/dist/additional-methods.min.js"></script>
 
     <script>
-        // Toggle API Key visibility
+        const dragDropArea = document.getElementById('dragDropArea');
+        const cvFileInput = document.getElementById('cv-file');
+        const browseBtn = document.getElementById('browseBtn');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+
+        browseBtn.addEventListener('click', () => cvFileInput.click());
+        dragDropArea.addEventListener('click', () => cvFileInput.click());
+
+        dragDropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dragDropArea.classList.add('dragover');
+        });
+
+        dragDropArea.addEventListener('dragleave', () => {
+            dragDropArea.classList.remove('dragover');
+        });
+
+        dragDropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dragDropArea.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                cvFileInput.files = e.dataTransfer.files;
+                handleFileSelect();
+            }
+        });
+
+        cvFileInput.addEventListener('change', handleFileSelect);
+
+        function handleFileSelect() {
+            if (cvFileInput.files.length) {
+                fileName.textContent = '📄 ' + cvFileInput.files[0].name;
+                fileInfo.classList.add('show');
+                dragDropArea.style.opacity = '0.6';
+            }
+        }
+
         function toggleKeyVisibility(inputId, btn) {
             const input = document.getElementById(inputId);
             if (!input) return;
             if (input.type === 'password') {
                 input.type = 'text';
                 btn.textContent = '🔒';
-                btn.setAttribute('title', 'Hide Key');
             } else {
                 input.type = 'password';
                 btn.textContent = '👁️';
-                btn.setAttribute('title', 'Show Key');
             }
         }
 
         $(document).ready(function () {
-            const dragDropArea = document.getElementById('dragDropArea');
-            const cvFileInput = document.getElementById('cv-file');
-            const browseBtn = document.getElementById('browseBtn');
-            const fileInfo = document.getElementById('fileInfo');
-            const fileName = document.getElementById('fileName');
-
-            // Browse button click
-            browseBtn.addEventListener('click', () => {
-                cvFileInput.click();
-            });
-
-            // Drag and Drop Area click to browse
-            dragDropArea.addEventListener('click', () => {
-                cvFileInput.click();
-            });
-
-            // Drag and drop events
-            dragDropArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dragDropArea.classList.add('dragover');
-            });
-
-            dragDropArea.addEventListener('dragleave', () => {
-                dragDropArea.classList.remove('dragover');
-            });
-
-            dragDropArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dragDropArea.classList.remove('dragover');
-
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    cvFileInput.files = files;
-                    handleFileSelect();
-                    // Trigger jQuery Validator for the file
-                    $(cvFileInput).valid();
-                }
-            });
-
-            // File input change
-            cvFileInput.addEventListener('change', () => {
-                handleFileSelect();
-                // Trigger jQuery Validator for the file
-                $(cvFileInput).valid();
-            });
-
-            // Handle file selection preview
-            function handleFileSelect() {
-                if (cvFileInput.files.length > 0) {
-                    const file = cvFileInput.files[0];
-                    const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
-                    fileName.textContent = `📄 ${file.name} (${sizeMB} MB)`;
-                    fileInfo.classList.add('show');
-                    dragDropArea.style.opacity = '0.65';
-                } else {
-                    fileInfo.classList.remove('show');
-                    dragDropArea.style.opacity = '1';
-                }
-            }
-
-            // ==========================================
-            // Custom jQuery Validator Methods
-            // ==========================================
-
-            // Validate file extension (.pdf, .doc, .docx)
-            $.validator.addMethod("cvExtension", function (value, element) {
-                if (this.optional(element) || !element.files || !element.files.length) {
-                    return true;
-                }
-                const ext = element.files[0].name.split('.').pop().toLowerCase();
-                return ['pdf', 'doc', 'docx'].indexOf(ext) !== -1;
-            }, "Please upload a valid PDF or Word document (.pdf, .doc, .docx)");
-
-            // Validate file size (max 5MB)
-            $.validator.addMethod("cvFileSize", function (value, element, param) {
-                if (this.optional(element) || !element.files || !element.files.length) {
-                    return true;
-                }
-                return element.files[0].size <= param;
-            }, "File size must not exceed 5MB");
-
-            // Validate phone number format (optional, but validated if filled)
-            $.validator.addMethod("customPhone", function (value, element) {
-                return this.optional(element) || /^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]{6,15}$/.test(value.trim());
-            }, "Please enter a valid phone number");
-
-            // ==========================================
-            // jQuery Validation Initialization
-            // ==========================================
-            const validator = $("#profileForm").validate({
-                // Allow validation of the hidden cvFile input
-                ignore: ":hidden:not(#cv-file)",
-
-                // Validate on user action
-                onfocusout: function (element) {
-                    $(element).valid();
-                },
-                onkeyup: function (element) {
-                    $(element).valid();
-                },
-
-                // Validation Rules
+            $("#profileForm").validate({
                 rules: {
-                    cvFile: {
-                        required: true,
-                        cvExtension: true,
-                        cvFileSize: 5 * 1024 * 1024 // 5MB
-                    },
                     fullName: {
                         required: true,
-                        minlength: 2
+                        minlength: 3,
+                        maxlength: 50
                     },
                     email: {
                         required: true,
                         email: true
                     },
-                    phone: {
-                        customPhone: true
-                    },
-                    location: {
-                        minlength: 2
-                    },
                     experience: {
                         required: true
                     },
-                    jobTitle: {
-                        minlength: 2
-                    },
                     apifyKey: {
                         required: true,
-                        minlength: 8
+                        minlength: 5,
+                        maxlength: 100
                     },
                     groqKey: {
                         required: true,
-                        minlength: 8
-                    },
-                    bio: {
-                        minlength: 10
+                        minlength: 5,
+                        maxlength: 100
                     }
                 },
-
-                // Custom Error Messages
                 messages: {
-                    cvFile: {
-                        required: "Please upload your CV before submitting",
-                        cvExtension: "Only .pdf, .doc, and .docx formats are supported",
-                        cvFileSize: "File size exceeds the 5MB limit"
-                    },
                     fullName: {
-                        required: "Please enter your full name",
-                        minlength: "Full name must be at least 2 characters long"
+                        required: "Please enter your name",
+                        minlength: "Name must be at least 3 characters",
+                        maxlength: "Name cannot exceed 50 characters"
                     },
                     email: {
-                        required: "Please enter your email address",
-                        email: "Please enter a valid email address (e.g., name@example.com)"
-                    },
-                    phone: {
-                        customPhone: "Please enter a valid phone number"
-                    },
-                    location: {
-                        minlength: "Location must be at least 2 characters long"
+                        required: "Please enter your email",
+                        email: "Please enter a valid email"
                     },
                     experience: {
-                        required: "Please select your years of experience"
-                    },
-                    jobTitle: {
-                        minlength: "Desired job title must be at least 2 characters long"
+                        required: "Please select your experience"
                     },
                     apifyKey: {
                         required: "Please enter your Apify key",
-                        minlength: "Apify key must be at least 8 characters long"
+                        minlength: "Apify key is too short"
                     },
                     groqKey: {
-                        required: "Please enter your Groq LLM key",
-                        minlength: "Groq LLM key must be at least 8 characters long"
-                    },
-                    bio: {
-                        minlength: "Professional summary should be at least 10 characters long"
+                        required: "Please enter your Groq key",
+                        minlength: "Groq key is too short"
                     }
                 },
-
-                // Precise Error Placement
                 errorPlacement: function (error, element) {
-                    if (element.attr("name") === "cvFile") {
-                        error.insertAfter("#browseBtn");
-                    } else if (element.parent(".input-password-wrapper").length) {
+                    if (element.parent(".input-password-wrapper").length) {
                         error.insertAfter(element.parent(".input-password-wrapper"));
                     } else {
                         error.insertAfter(element);
                     }
                 },
-
-                // Error highlighting
-                highlight: function (element, errorClass, validClass) {
-                    $(element).addClass(errorClass).removeClass(validClass);
-                    if ($(element).attr('id') === 'cv-file') {
-                        $('#dragDropArea').addClass('file-error');
-                    }
-                },
-
-                // Error un-highlighting
-                unhighlight: function (element, errorClass, validClass) {
-                    $(element).removeClass(errorClass).addClass(validClass);
-                    if ($(element).attr('id') === 'cv-file') {
-                        $('#dragDropArea').removeClass('file-error');
-                    }
-                },
-
-                // Successful Form Submission
                 submitHandler: function (form) {
-                    const formData = {
-                        cv: cvFileInput.files[0] ? cvFileInput.files[0].name : '',
-                        fullName: $('#fullName').val().trim(),
-                        email: $('#email').val().trim(),
-                        phone: $('#phone').val().trim(),
-                        location: $('#location').val().trim(),
-                        experience: $('#experience').val(),
-                        jobTitle: $('#jobTitle').val().trim(),
-                        apifyKey: $('#apifyKey').val().trim(),
-                        groqKey: $('#groqKey').val().trim(),
-                        bio: $('#bio').val().trim()
-                    };
+                    if (!cvFileInput.files.length) {
+                        alert("Please upload your CV");
+                        return;
+                    }
 
-                    console.log("Validated Form Submission:", formData);
+                    console.log({
+                        cv: cvFileInput.files[0].name,
+                        fullName: $("#fullName").val(),
+                        email: $("#email").val(),
+                        phone: $("#phone").val(),
+                        location: $("#location").val(),
+                        experience: $("#experience").val(),
+                        jobTitle: $("#jobTitle").val(),
+                        apifyKey: $("#apifyKey").val(),
+                        groqKey: $("#groqKey").val(),
+                        bio: $("#bio").val()
+                    });
 
-                    // Show success banner
-                    const $success = $('#successMessage');
-                    $success.addClass('show');
+                    $("#successMessage").addClass("show");
 
-                    // Reset form after 2.5 seconds
                     setTimeout(() => {
                         form.reset();
-                        $('#fileInfo').removeClass('show');
-                        $('#dragDropArea').css('opacity', '1').removeClass('file-error');
-                        $success.removeClass('show');
-
-                        // Reset validator states
-                        validator.resetForm();
-                        $('#profileForm').find('.valid, .error').removeClass('valid error');
-                    }, 2500);
-
-                    return false;
+                        $("#fileInfo").removeClass("show");
+                        $("#dragDropArea").css("opacity", "1");
+                        $("#successMessage").removeClass("show");
+                    }, 2000);
                 }
             });
         });
