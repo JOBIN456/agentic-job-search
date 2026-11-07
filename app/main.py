@@ -3,7 +3,7 @@ import router
 
 from fastapi.staticfiles import StaticFiles
 from database import Base, engine
-from  models import User
+from models import User, CandidateProfile
 from starlette.middleware.sessions import SessionMiddleware
 from dotenv import load_dotenv
 import os
