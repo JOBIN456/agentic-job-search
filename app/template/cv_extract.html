@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CV Upload & Profile Form</title>
 
     <style>
-        *,
-        *::before,
-        *::after {
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -58,15 +55,8 @@
         }
 
         @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(30px);
-            }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(30px); }
         }
 
         /* Main Container */
@@ -229,7 +219,6 @@
         }
 
         @media (max-width: 768px) {
-
             .form-section input,
             .form-section select,
             .form-section textarea {
@@ -362,7 +351,6 @@
         }
     </style>
 </head>
-
 <body>
     <!-- Background blobs -->
     <div class="bg-blob blob-1"></div>
@@ -447,19 +435,15 @@
                 <div class="form-section">
                     <label for="apifyKey">Apify Key <span class="required-star">*</span></label>
                     <div class="input-password-wrapper">
-                        <input type="password" id="apifyKey" name="apifyKey" placeholder="Enter your Apify key"
-                            autocomplete="off">
-                        <button type="button" class="btn-toggle-key" onclick="toggleKeyVisibility('apifyKey', this)"
-                            title="Show/Hide">👁️</button>
+                        <input type="password" id="apifyKey" name="apifyKey" placeholder="Enter your Apify key" autocomplete="off">
+                        <button type="button" class="btn-toggle-key" onclick="toggleKeyVisibility('apifyKey', this)" title="Show/Hide">👁️</button>
                     </div>
                 </div>
                 <div class="form-section">
                     <label for="groqKey">Groq LLM Key <span class="required-star">*</span></label>
                     <div class="input-password-wrapper">
-                        <input type="password" id="groqKey" name="groqKey" placeholder="Enter your Groq key"
-                            autocomplete="off">
-                        <button type="button" class="btn-toggle-key" onclick="toggleKeyVisibility('groqKey', this)"
-                            title="Show/Hide">👁️</button>
+                        <input type="password" id="groqKey" name="groqKey" placeholder="Enter your Groq key" autocomplete="off">
+                        <button type="button" class="btn-toggle-key" onclick="toggleKeyVisibility('groqKey', this)" title="Show/Hide">👁️</button>
                     </div>
                 </div>
             </div>
@@ -630,5 +614,4 @@
         });
     </script>
 </body>
-
 </html>
