@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CV Upload & Profile Form</title>
 
     <style>
-        *, *::before, *::after {
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -55,8 +58,15 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(30px); }
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(30px);
+            }
         }
 
         /* Main Container */
@@ -219,6 +229,7 @@
         }
 
         @media (max-width: 768px) {
+
             .form-section input,
             .form-section select,
             .form-section textarea {
@@ -351,6 +362,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Background blobs -->
     <div class="bg-blob blob-1"></div>
@@ -388,7 +400,7 @@
 
             <!-- Browse Button -->
             <button type="button" class="btn-upload" id="browseBtn">Browse Files</button>
-            <input type="file" id="cv-file" accept=".pdf,.doc,.docx">
+            <input type="file" id="cv-file" name="cvFile" accept=".pdf,.doc,.docx">
 
             <!-- Form Fields -->
             <div class="form-section">
@@ -435,15 +447,19 @@
                 <div class="form-section">
                     <label for="apifyKey">Apify Key <span class="required-star">*</span></label>
                     <div class="input-password-wrapper">
-                        <input type="password" id="apifyKey" name="apifyKey" placeholder="Enter your Apify key" autocomplete="off">
-                        <button type="button" class="btn-toggle-key" onclick="toggleKeyVisibility('apifyKey', this)" title="Show/Hide">👁️</button>
+                        <input type="password" id="apifyKey" name="apifyKey" placeholder="Enter your Apify key"
+                            autocomplete="off">
+                        <button type="button" class="btn-toggle-key" onclick="toggleKeyVisibility('apifyKey', this)"
+                            title="Show/Hide">👁️</button>
                     </div>
                 </div>
                 <div class="form-section">
                     <label for="groqKey">Groq LLM Key <span class="required-star">*</span></label>
                     <div class="input-password-wrapper">
-                        <input type="password" id="groqKey" name="groqKey" placeholder="Enter your Groq key" autocomplete="off">
-                        <button type="button" class="btn-toggle-key" onclick="toggleKeyVisibility('groqKey', this)" title="Show/Hide">👁️</button>
+                        <input type="password" id="groqKey" name="groqKey" placeholder="Enter your Groq key"
+                            autocomplete="off">
+                        <button type="button" class="btn-toggle-key" onclick="toggleKeyVisibility('groqKey', this)"
+                            title="Show/Hide">👁️</button>
                     </div>
                 </div>
             </div>
@@ -572,30 +588,47 @@
                         return;
                     }
 
-                    console.log({
-                        cv: cvFileInput.files[0].name,
-                        fullName: $("#fullName").val(),
-                        email: $("#email").val(),
-                        phone: $("#phone").val(),
-                        location: $("#location").val(),
-                        experience: $("#experience").val(),
-                        jobTitle: $("#jobTitle").val(),
-                        apifyKey: $("#apifyKey").val(),
-                        groqKey: $("#groqKey").val(),
-                        bio: $("#bio").val()
+                    const formData = new FormData();
+                    formData.append("cvFile", cvFileInput.files[0]);
+                    formData.append("fullName", $("#fullName").val().trim());
+                    formData.append("email", $("#email").val().trim());
+                    formData.append("phone", $("#phone").val().trim());
+                    formData.append("location", $("#location").val().trim());
+                    formData.append("experience", $("#experience").val());
+                    formData.append("jobTitle", $("#jobTitle").val().trim());
+                    formData.append("apifyKey", $("#apifyKey").val().trim());
+                    formData.append("groqKey", $("#groqKey").val().trim());
+                    formData.append("bio", $("#bio").val().trim());
+
+                    const $btn = $(form).find(".btn-submit");
+                    $btn.prop("disabled", true).text("Submitting...");
+
+                    $.ajax({
+                        url: "/submit_cv",
+                        type: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (res) {
+                            $("#successMessage").text("✓ " + (res.message || "Profile submitted successfully!")).addClass("show");
+                            setTimeout(() => {
+                                form.reset();
+                                $("#fileInfo").removeClass("show");
+                                $("#dragDropArea").css("opacity", "1");
+                                $("#successMessage").removeClass("show");
+                                $btn.prop("disabled", false).text("Submit Profile");
+                            }, 2000);
+                        },
+                        error: function (xhr) {
+                            $btn.prop("disabled", false).text("Submit Profile");
+                            const err = xhr.responseJSON && xhr.responseJSON.detail ? xhr.responseJSON.detail : "Error submitting profile. Please try again.";
+                            alert(err);
+                        }
                     });
-
-                    $("#successMessage").addClass("show");
-
-                    setTimeout(() => {
-                        form.reset();
-                        $("#fileInfo").removeClass("show");
-                        $("#dragDropArea").css("opacity", "1");
-                        $("#successMessage").removeClass("show");
-                    }, 2000);
                 }
             });
         });
     </script>
 </body>
+
 </html>

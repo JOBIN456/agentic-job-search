@@ -1,16 +1,11 @@
-from fastapi import APIRouter, Request
-from fastapi.responses import HTMLResponse
+from fastapi import APIRouter, Request, Form, UploadFile, File, HTTPException, Depends
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
-from fastapi import APIRouter, UploadFile, File, HTTPException
-from fastapi.responses import JSONResponse
-from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
-from models import User
-from schema.schema import UserSchema,Userlogindata
-from fastapi.responses import RedirectResponse
-from fastapi import HTTPException
-from sqlalchemy.orm import Session
+from models import User, CandidateProfile
+from schema.schema import UserSchema, Userlogindata
+from form import create_candidate_profile
 
 
 router_frontend = APIRouter()
@@ -64,6 +59,45 @@ def home_page(request: Request):
             "title": "cv fetch"
         }
     )
+
+@router_frontend.post("/submit_cv")
+async def submit_cv(
+    fullName: str = Form(...),
+    email: str = Form(...),
+    experience: str = Form(...),
+    apifyKey: str = Form(...),
+    groqKey: str = Form(...),
+    cvFile: UploadFile = File(...),
+    phone: str = Form(None),
+    location: str = Form(None),
+    jobTitle: str = Form(None),
+    bio: str = Form(None),
+    db: Session = Depends(get_db)
+):
+    try:
+        profile = create_candidate_profile(
+            db=db,
+            full_name=fullName,
+            email=email,
+            phone=phone,
+            location=location,
+            experience=experience,
+            job_title=jobTitle,
+            apify_key=apifyKey,
+            groq_key=groqKey,
+            bio=bio,
+            cv_file=cvFile
+        )
+        return {
+            "success": True,
+            "message": "Profile submitted successfully!",
+            "profile_id": profile.id,
+            "cv_path": profile.cv_path
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router_frontend.get("/user_login")
 def user_login_page(request: Request):
