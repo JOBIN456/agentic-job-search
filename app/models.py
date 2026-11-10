@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Boolean, Column, DateTime, Integer, String, Text
+from sqlalchemy import Boolean, Column, DateTime, Integer, String
 from database import Base
 
 
@@ -24,7 +24,6 @@ class CandidateProfile(Base):
     job_title = Column(String(100), nullable=True)
     apify_key = Column(String(255), nullable=False)
     groq_key = Column(String(255), nullable=False)
-    bio = Column(Text, nullable=True)
     cv_path = Column(String(500), nullable=False)  # URL / server path to the file in cv folder
     created_at = Column(DateTime, default=datetime.utcnow)
 
