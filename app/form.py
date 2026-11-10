@@ -29,7 +29,6 @@ class CandidateProfileForm(BaseModel):
     job_title: Optional[str] = None
     apify_key: str = Field(..., min_length=5, max_length=100)
     groq_key: str = Field(..., min_length=5, max_length=100)
-    bio: Optional[str] = None
 
 
 class CandidateProfileResponse(BaseModel):
@@ -42,7 +41,6 @@ class CandidateProfileResponse(BaseModel):
     job_title: Optional[str] = None
     apify_key: str
     groq_key: str
-    bio: Optional[str] = None
     cv_path: str
     created_at: Optional[datetime] = None
 
@@ -102,7 +100,6 @@ def create_candidate_profile(
     phone: Optional[str] = None,
     location: Optional[str] = None,
     job_title: Optional[str] = None,
-    bio: Optional[str] = None,
 ) -> CandidateProfile:
     """
     1. Saves the uploaded CV file to the server cv folder.
@@ -121,7 +118,6 @@ def create_candidate_profile(
         job_title=job_title,
         apify_key=apify_key,
         groq_key=groq_key,
-        bio=bio,
         cv_path=cv_url_path  # Only the URL path is saved in the database
     )
 
