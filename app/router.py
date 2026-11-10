@@ -71,7 +71,6 @@ async def submit_cv(
     phone: str = Form(None),
     location: str = Form(None),
     jobTitle: str = Form(None),
-    bio: str = Form(None),
     db: Session = Depends(get_db)
 ):
     try:
@@ -85,7 +84,6 @@ async def submit_cv(
             job_title=jobTitle,
             apify_key=apifyKey,
             groq_key=groqKey,
-            bio=bio,
             cv_file=cvFile
         )
         return {
