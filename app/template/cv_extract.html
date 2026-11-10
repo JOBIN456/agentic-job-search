@@ -448,11 +448,6 @@
                 </div>
             </div>
 
-            <div class="form-section">
-                <label for="bio">Professional Summary</label>
-                <textarea id="bio" name="bio" rows="3" placeholder="Tell us about yourself..."></textarea>
-            </div>
-
             <button type="submit" class="btn-submit">Submit Profile</button>
         </form>
     </div>
@@ -582,7 +577,6 @@
                     formData.append("jobTitle", $("#jobTitle").val().trim());
                     formData.append("apifyKey", $("#apifyKey").val().trim());
                     formData.append("groqKey", $("#groqKey").val().trim());
-                    formData.append("bio", $("#bio").val().trim());
 
                     const $btn = $(form).find(".btn-submit");
                     $btn.prop("disabled", true).text("Submitting...");
