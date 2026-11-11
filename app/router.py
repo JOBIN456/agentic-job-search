@@ -60,6 +60,16 @@ def home_page(request: Request):
         }
     )
 
+@router_frontend.get("/chat")
+def chat_page(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="chat.html",
+        context={
+            "title": "AI Job Assistant Chat"
+        }
+    )
+
 @router_frontend.post("/submit_cv")
 async def submit_cv(
     fullName: str = Form(...),

@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Job Assistant - Chat</title>
     <style>
-        *,
-        *::before,
-        *::after {
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -61,15 +58,8 @@
         }
 
         @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(30px);
-            }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(30px); }
         }
 
         /* Main Chat App Shell */
@@ -343,15 +333,8 @@
         }
 
         @keyframes pulseDot {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.45;
-            }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.45; }
         }
 
         .header-actions {
@@ -500,7 +483,6 @@
                 opacity: 0;
                 transform: translateY(8px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -612,27 +594,12 @@
             animation: typingBounce 1.2s infinite ease-in-out;
         }
 
-        .typing-dots span:nth-child(2) {
-            animation-delay: 0.15s;
-        }
-
-        .typing-dots span:nth-child(3) {
-            animation-delay: 0.3s;
-        }
+        .typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.3s; }
 
         @keyframes typingBounce {
-
-            0%,
-            60%,
-            100% {
-                transform: translateY(0);
-                opacity: 0.5;
-            }
-
-            30% {
-                transform: translateY(-6px);
-                opacity: 1;
-            }
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+            30% { transform: translateY(-6px); opacity: 1; }
         }
 
         /* Input Footer */
@@ -754,8 +721,7 @@
             }
 
             #chatInput {
-                font-size: 16px;
-                /* Prevent iOS auto-zoom */
+                font-size: 16px; /* Prevent iOS auto-zoom */
             }
         }
 
@@ -798,8 +764,7 @@
                 display: none;
             }
 
-            .blob-1,
-            .blob-2 {
+            .blob-1, .blob-2 {
                 width: 200px;
                 height: 200px;
                 filter: blur(60px);
@@ -807,7 +772,6 @@
         }
     </style>
 </head>
-
 <body>
     <!-- Background Blobs -->
     <div class="bg-blob blob-1"></div>
@@ -825,8 +789,7 @@
                     <div class="brand-icon">🤖</div>
                     <span>JobFetcher AI</span>
                 </div>
-                <button type="button" class="btn-close-sidebar" id="closeSidebarBtn"
-                    aria-label="Close sidebar">✕</button>
+                <button type="button" class="btn-close-sidebar" id="closeSidebarBtn" aria-label="Close sidebar">✕</button>
             </div>
 
             <button type="button" class="btn-new-chat" id="newChatBtn">
@@ -844,8 +807,7 @@
                 <button type="button" class="sidebar-item" data-prompt="Search for remote Python and FastAPI openings">
                     <span>🌍</span><span>Remote Python roles</span>
                 </button>
-                <button type="button" class="sidebar-item"
-                    data-prompt="Draft a tailored cover letter for a backend engineer role">
+                <button type="button" class="sidebar-item" data-prompt="Draft a tailored cover letter for a backend engineer role">
                     <span>✍️</span><span>Draft cover letter</span>
                 </button>
             </div>
@@ -866,8 +828,7 @@
             <header class="chat-header">
                 <div class="header-left">
                     <button type="button" class="btn-menu" id="openSidebarBtn" aria-label="Open menu">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                             <line x1="3" y1="6" x2="21" y2="6"></line>
                             <line x1="3" y1="12" x2="21" y2="12"></line>
                             <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -900,12 +861,10 @@
                 <div class="welcome-container" id="welcomeScreen">
                     <div class="welcome-badge">✨</div>
                     <h2>How can I help with your job search?</h2>
-                    <p>Ask me to search matching job openings, review your uploaded CV, suggest improvements, or prepare
-                        for interviews.</p>
+                    <p>Ask me to search matching job openings, review your uploaded CV, suggest improvements, or prepare for interviews.</p>
 
                     <div class="prompt-grid">
-                        <button type="button" class="prompt-card"
-                            data-prompt="Find jobs that best match my uploaded CV">
+                        <button type="button" class="prompt-card" data-prompt="Find jobs that best match my uploaded CV">
                             <strong>🔍 Find Matching Jobs</strong>
                             <span>Search roles tailored to your skills and experience</span>
                         </button>
@@ -913,13 +872,11 @@
                             <strong>📄 Review My CV</strong>
                             <span>Get actionable tips to stand out to recruiters</span>
                         </button>
-                        <button type="button" class="prompt-card"
-                            data-prompt="Search remote full-stack developer jobs posted this week">
+                        <button type="button" class="prompt-card" data-prompt="Search remote full-stack developer jobs posted this week">
                             <strong>🌍 Remote Opportunities</strong>
                             <span>Discover fresh remote-friendly positions</span>
                         </button>
-                        <button type="button" class="prompt-card"
-                            data-prompt="Give me 5 common technical interview questions for my target role">
+                        <button type="button" class="prompt-card" data-prompt="Give me 5 common technical interview questions for my target role">
                             <strong>🎯 Interview Prep</strong>
                             <span>Practice key questions for your desired job title</span>
                         </button>
@@ -930,11 +887,14 @@
             <!-- Message Composer Footer -->
             <footer class="chat-input-area">
                 <form id="chatForm" class="input-wrapper">
-                    <textarea id="chatInput" rows="1" placeholder="Ask about matching jobs, CV feedback, or skills..."
-                        autocomplete="off"></textarea>
+                    <textarea
+                        id="chatInput"
+                        rows="1"
+                        placeholder="Ask about matching jobs, CV feedback, or skills..."
+                        autocomplete="off"
+                    ></textarea>
                     <button type="submit" class="btn-send" id="sendBtn" disabled aria-label="Send message">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="22" y1="2" x2="11" y2="13"></line>
                             <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                         </svg>
@@ -1145,5 +1105,5 @@
         clearChatBtn.addEventListener('click', resetChat);
     </script>
 </body>
-
 </html>
+
