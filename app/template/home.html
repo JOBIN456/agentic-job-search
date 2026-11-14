@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Career Hub - Glassmorphism UI</title>
-      <link href="{{ url_for('static', path='/main.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', path='/main.css') }}" rel="stylesheet">
 
     <!-- <style>
         * {
@@ -224,6 +225,7 @@
         }
     </style> -->
 </head>
+
 <body>
     <!-- Animated background blobs -->
     <div class="bg-blob blob-1"></div>
@@ -246,13 +248,13 @@
             <div class="card-icon">🔍</div>
             <h2>Search Jobs</h2>
             <p>Explore thousands of job opportunities matched to your skills</p>
-            <button class="card-button" onclick="searchJobs()">Start Searching</button>
+            <a class="card-button" href="/chat">Start Searching</a>
         </div>
     </div>
 
     <script>
         // CV Upload handler
-        document.getElementById('cv-upload').addEventListener('change', function(e) {
+        document.getElementById('cv-upload').addEventListener('change', function (e) {
             if (e.target.files.length > 0) {
                 const fileName = e.target.files[0].name;
                 console.log('CV uploaded:', fileName);
@@ -262,10 +264,9 @@
 
         // Job Search handler
         function searchJobs() {
-            alert('Redirecting to job search page...');
-            // You can add actual navigation here
-            // window.location.href = '/jobs';
+            window.location.href = '/chat';
         }
     </script>
 </body>
+
 </html>
