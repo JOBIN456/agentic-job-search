@@ -13,7 +13,9 @@ Fastapi_auth = os.getenv("Fastapi_Auth")
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR = os.path.join(BASE_DIR, "static") if os.path.exists(os.path.join(BASE_DIR, "static")) else "static"
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
 app.include_router(router.router_frontend)
