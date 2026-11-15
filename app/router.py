@@ -2,17 +2,20 @@ from fastapi import APIRouter, Request, Form, UploadFile, File, HTTPException, D
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
-from database import get_db
+from database import get_db, user_data_save
 from models import User, CandidateProfile
-from schema.schema import UserSchema, Userlogindata
-from form import create_candidate_profile
+from schema.schema import UserSchema, Userlogindata, CandidateProfileSchema, CandidateProfileResponse
 
 
 router_frontend = APIRouter()
 
 router_admin= APIRouter()
 
-templates = Jinja2Templates(directory="template")
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+TEMPLATE_DIR = os.path.join(BASE_DIR, "template") if os.path.exists(os.path.join(BASE_DIR, "template")) else "template"
+templates = Jinja2Templates(directory=TEMPLATE_DIR)
 
 
 def require_admin(
@@ -84,8 +87,8 @@ async def submit_cv(
     db: Session = Depends(get_db)
 ):
     try:
-        profile = create_candidate_profile(
-            db=db,
+        # Backend validation using schema.py
+        validated_data = CandidateProfileSchema(
             full_name=fullName,
             email=email,
             phone=phone,
@@ -93,9 +96,16 @@ async def submit_cv(
             experience=experience,
             job_title=jobTitle,
             apify_key=apifyKey,
-            groq_key=groqKey,
+            groq_key=groqKey
+        )
+
+        # Save CV to static/cv and save candidate profile to DB
+        profile = user_data_save(
+            db=db,
+            data=validated_data,
             cv_file=cvFile
         )
+
         return {
             "success": True,
             "message": "Profile submitted successfully!",

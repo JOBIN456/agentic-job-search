@@ -31,3 +31,5 @@ class CandidateProfile(Base):
 # Aliases for convenience
 UserProfile = CandidateProfile
 CVProfile = CandidateProfile
+
+from database import user_data_save
