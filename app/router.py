@@ -127,6 +127,34 @@ def user_login_page(request: Request):
         }
     )
 
+@router_frontend.post("/user/login/credential/")
+@router_frontend.post("/user_login")
+def user_login_submit(
+    request: Request,
+    user: Userlogindata,
+    db: Session = Depends(get_db)
+):
+    existing_user = db.query(User).filter(
+        User.username == user.username,
+        User.password == user.password
+    ).first()
+
+    if existing_user:
+        request.session["user_id"] = existing_user.id
+        request.session["username"] = existing_user.username
+        request.session["is_staff"] = existing_user.is_staff
+
+        return {
+            "success": True,
+            "message": "Login successful",
+            "redirect_url": "/"
+        }
+
+    raise HTTPException(
+        status_code=401,
+        detail="Invalid username or password"
+    )
+
 
 @router_frontend.get("/admin_login")
 def admin_login_page(request: Request):

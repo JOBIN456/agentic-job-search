@@ -1,229 +1,537 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>User Login - JobFetcher</title>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+            *,
+            *::before,
+            *::after {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
 
-        .login-container {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            padding: 40px;
-        }
+            html {
+                -webkit-text-size-adjust: 100%;
+            }
 
-        .login-header {
-            margin-bottom: 30px;
-            text-align: center;
-        }
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                min-height: 100vh;
+                min-height: 100dvh;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 20px 16px;
+                position: relative;
+                overflow-x: hidden;
+                color: #ffffff;
+            }
 
-        .login-header h1 {
-            font-size: 28px;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 8px;
-        }
+            /* Animated background blobs */
+            .bg-blob {
+                position: fixed;
+                border-radius: 50%;
+                filter: blur(80px);
+                opacity: 0.35;
+                z-index: 0;
+                pointer-events: none;
+            }
 
-        .login-header p {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
-        }
+            .blob-1 {
+                width: 340px;
+                height: 340px;
+                background: #ff006e;
+                top: -60px;
+                right: -60px;
+                animation: float 7s ease-in-out infinite;
+            }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+            .blob-2 {
+                width: 280px;
+                height: 280px;
+                background: #00d4ff;
+                bottom: -60px;
+                left: -60px;
+                animation: float 9s ease-in-out infinite reverse;
+            }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.9);
-        }
+            @keyframes float {
 
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 12px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            font-family: inherit;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(5px);
-            color: #ffffff;
-        }
+                0%,
+                100% {
+                    transform: translateY(0px);
+                }
 
-        input[type="email"]:focus,
-        input[type="password"]:focus {
-            outline: none;
-            border-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
-            background-color: rgba(255, 255, 255, 0.15);
-        }
+                50% {
+                    transform: translateY(30px);
+                }
+            }
 
-        input[type="email"]::placeholder,
-        input[type="password"]::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        .form-options {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            font-size: 14px;
-        }
-
-        .checkbox-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .checkbox-wrapper label {
-            margin: 0;
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 400;
-            cursor: pointer;
-        }
-
-        .forgot-password {
-            color: rgba(255, 255, 255, 0.9);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .forgot-password:hover {
-            color: #ffffff;
-            text-decoration: underline;
-        }
-
-        .login-button {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 16px;
-            backdrop-filter: blur(5px);
-        }
-
-        .login-button:hover {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.25) 100%);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .login-button:active {
-            transform: scale(0.98);
-        }
-
-        .signup-link {
-            text-align: center;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .signup-link a {
-            color: rgba(255, 255, 255, 0.95);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.2s ease;
-        }
-
-        .signup-link a:hover {
-            color: #ffffff;
-            text-decoration: underline;
-        }
-
-        @media (max-width: 480px) {
+            /* Main Glassmorphism Login Container */
             .login-container {
-                padding: 30px 20px;
+                background: rgba(255, 255, 255, 0.12);
+                backdrop-filter: blur(14px);
+                -webkit-backdrop-filter: blur(14px);
+                border-radius: 24px;
+                border: 1px solid rgba(255, 255, 255, 0.25);
+                box-shadow: 0 12px 40px rgba(31, 38, 135, 0.37);
+                width: 100%;
+                max-width: 440px;
+                padding: 42px 36px;
+                position: relative;
+                z-index: 1;
+                margin: auto 0;
+            }
+
+            /* Header */
+            .login-header {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+
+            .login-logo {
+                width: 52px;
+                height: 52px;
+                border-radius: 16px;
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 24px;
+                margin-bottom: 14px;
+                box-shadow: 0 6px 18px rgba(245, 87, 108, 0.35);
             }
 
             .login-header h1 {
-                font-size: 24px;
+                font-size: 26px;
+                font-weight: 700;
+                color: #ffffff;
+                margin-bottom: 6px;
             }
 
-            .form-options {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
+            .login-header p {
+                font-size: 14px;
+                color: rgba(255, 255, 255, 0.8);
             }
-        }
 
-        /* Accessibility: Focus visible for keyboard navigation */
-        *:focus-visible {
-            outline: 2px solid rgba(255, 255, 255, 0.9);
-            outline-offset: 2px;
-        }
+            /* Form Groups */
+            .form-group {
+                margin-bottom: 20px;
+                position: relative;
+            }
+
+                .form-group label {
+                    display: block;
+                    margin-bottom: 7px;
+                    font-size: 13.5px;
+                    font-weight: 600;
+                    color: #ffffff;
+                }
+
+                    .input-wrapper {
+                        position: relative;
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                    }
+
+                    .input-icon {
+                        position: absolute;
+                        left: 14px;
+                        color: rgba(255, 255, 255, 0.65);
+                        font-size: 15px;
+                        pointer-events: none;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    .form-group input[type="text"],
+                    .form-group input[type="password"] {
+                        width: 100%;
+                        min-height: 46px;
+                        padding: 12px 14px 12px 42px;
+                        border: 1px solid rgba(255, 255, 255, 0.3);
+                        border-radius: 12px;
+                        background: rgba(255, 255, 255, 0.1);
+                        color: #ffffff;
+                        font-size: 15px;
+                        font-family: inherit;
+                        transition: all 0.25s ease;
+                    }
+
+
+                        .input-wrapper.has-toggle input[type="password"],
+                        .input-wrapper.has-toggle input[type="text"] {
+                            padding-right: 44px;
+                        }
+
+                        .form-group input::placeholder {
+                            color: rgba(255, 255, 255, 0.5);
+                        }
+
+                        .form-group input:focus {
+                            outline: none;
+                            background: rgba(255, 255, 255, 0.16);
+                            border-color: rgba(255, 255, 255, 0.7);
+                            box-shadow: 0 0 12px rgba(102, 126, 234, 0.45);
+                        }
+
+
+                            /* Password Toggle Button */
+                            .btn-toggle-pw {
+                                position: absolute;
+                                right: 8px;
+                                background: rgba(255, 255, 255, 0.12);
+                                border: none;
+                                color: rgba(255, 255, 255, 0.85);
+                                cursor: pointer;
+                                width: 32px;
+                                height: 32px;
+                                border-radius: 8px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 14px;
+                                transition: background 0.2s, transform 0.2s;
+                                user-select: none;
+                            }
+
+                            .btn-toggle-pw:hover {
+                                background: rgba(255, 255, 255, 0.22);
+                                color: #ffffff;
+                            }
+
+                            .btn-toggle-pw:active {
+                                transform: scale(0.95);
+                            }
+
+                            /* Validation Error Styles */
+                            label.error {
+                                color: #ff6b81;
+                                font-size: 12.5px;
+                                font-weight: 500;
+                                margin-top: 5px;
+                                display: block;
+                                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+                            }
+
+                            .form-group input.error {
+                                border-color: #ff6b81 !important;
+                                background: rgba(255, 107, 129, 0.12) !important;
+                                box-shadow: 0 0 10px rgba(255, 107, 129, 0.35) !important;
+                            }
+
+                            /* Form Options (Remember me & Links) */
+                            .form-options {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                margin-bottom: 22px;
+                                font-size: 13.5px;
+                            }
+
+                            .checkbox-wrapper {
+                                display: flex;
+                                align-items: center;
+                                gap: 8px;
+                                cursor: pointer;
+                            }
+
+
+                                .checkbox-wrapper input[type="checkbox"] {
+                                    width: 17px;
+                                    height: 17px;
+                                    cursor: pointer;
+                                    accent-color: #764ba2;
+                                    border-radius: 4px;
+                                }
+
+                                .checkbox-wrapper label {
+                                    cursor: pointer;
+                                    color: rgba(255, 255, 255, 0.85);
+                                    user-select: none;
+                                }
+
+                                    .admin-link {
+                                        color: rgba(255, 255, 255, 0.9);
+                                        text-decoration: none;
+                                        font-weight: 500;
+                                        transition: color 0.2s ease;
+                                    }
+
+                                        .admin-link:hover {
+                                            color: #ffffff;
+                                            text-decoration: underline;
+                                        }
+
+                                        /* Submit Button */
+                                        .login-button {
+                                            width: 100%;
+                                            min-height: 48px;
+                                            padding: 13px 24px;
+                                            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                                            color: #ffffff;
+                                            border: none;
+                                            border-radius: 12px;
+                                            font-size: 16px;
+                                            font-weight: 600;
+                                            cursor: pointer;
+                                            transition: all 0.3s ease;
+                                            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.35);
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            gap: 8px;
+                                        }
+
+
+                                            .login-button:hover:not(:disabled) {
+                                                transform: translateY(-2px);
+                                                box-shadow: 0 6px 20px rgba(245, 87, 108, 0.5);
+                                            }
+
+                                                .login-button:active:not(:disabled) {
+                                                    transform: translateY(0);
+                                                }
+
+                                                    .login-button:disabled {
+                                                        opacity: 0.6;
+                                                        cursor: not-allowed;
+                                                    }
+
+                                                    /* Bottom Navigation Link */
+                                                    .portal-links {
+                                                        margin-top: 22px;
+                                                        text-align: center;
+                                                        font-size: 13.5px;
+                                                        color: rgba(255, 255, 255, 0.75);
+                                                        display: flex;
+                                                        flex-direction: column;
+                                                        gap: 8px;
+                                                    }
+
+                                                        .portal-links a {
+                                                            color: #ffffff;
+                                                            text-decoration: none;
+                                                            font-weight: 600;
+                                                            transition: opacity 0.2s;
+                                                        }
+
+
+                                                            .portal-links a:hover {
+                                                                text-decoration: underline;
+                                                                opacity: 0.9;
+                                                            }
+
+                                                            /* Responsive Breakpoints */
+                                                            @media (max-width: 480px) {
+                                                                body {
+                                                                    padding: 16px 12px;
+                                                                }
+
+                                                                .login-container {
+                                                                    padding: 32px 20px;
+                                                                    border-radius: 18px;
+                                                                }
+
+                                                                .login-header h1 {
+                                                                    font-size: 22px;
+                                                                }
+
+                                                                .form-group input[type="text"],
+                                                                .form-group input[type="password"] {
+                                                                    font-size: 16px;
+                                                                    /* Prevents auto zoom on iOS Safari */
+                                                                }
+
+                                                                .form-options {
+                                                                    flex-direction: column;
+                                                                    align-items: flex-start;
+                                                                    gap: 12px;
+                                                                }
+                                                            }
     </style>
 </head>
+
 <body>
+    <!-- Animated background blobs -->
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+
+    <!-- Login Container -->
     <div class="login-container">
+        <!-- Header -->
         <div class="login-header">
+            <div class="login-logo">👤</div>
             <h1>Welcome Back</h1>
-            <p>Enter your credentials to access your account</p>
+            <p>Enter your username and password to sign in</p>
         </div>
 
-        <form>
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" placeholder="you@example.com" required>
-            </div>
-
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="••••••••" required>
-            </div>
-
-            <div class="form-options">
-                <div class="checkbox-wrapper">
-                    <input type="checkbox" id="remember" name="remember">
-                    <label for="remember">Remember me</label>
+            <!-- Login Form -->
+            <form id="loginForm" novalidate="novalidate">
+                <!-- Username Field -->
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </span>
+                        <input type="text" id="username" name="username" placeholder="Enter your username"
+                            autocomplete="username" required />
+                    </div>
                 </div>
-                <a href="#" class="forgot-password">Forgot password?</a>
-            </div>
 
-            <button type="submit" class="login-button">Sign In</button>
+                <!-- Password Field -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper has-toggle">
+                        <span class="input-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </span>
+                        <input type="password" id="password" name="password" placeholder="Enter your password"
+                            autocomplete="current-password" required />
+                        <button type="button" class="btn-toggle-pw" id="togglePwBtn"
+                            aria-label="Toggle password visibility" title="Show/Hide Password">👁️</button>
+                    </div>
+                </div>
 
-         
-        </form>
+                <!-- Options Row -->
+                <div class="form-options">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="remember" name="remember" />
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <a href="/admin_login" class="admin-link">Admin Portal →</a>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="login-button" id="submitBtn">
+                    <span>Sign In</span>
+                </button>
+
+
+                <div class="portal-links">
+                    <a href="/">← Return to Home</a>
+                </div>
+            </form>
     </div>
+
+    <!-- Scripts: jQuery, jQuery Validation & SweetAlert2 -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.21.0/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Password Visibility Toggle
+        const togglePwBtn = document.getElementById('togglePwBtn');
+        const passwordInput = document.getElementById('password');
+
+        togglePwBtn.addEventListener('click', () => {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                togglePwBtn.textContent = '🔒';
+                togglePwBtn.setAttribute('title', 'Hide Password');
+            } else {
+                passwordInput.type = 'password';
+                togglePwBtn.textContent = '👁️';
+                togglePwBtn.setAttribute('title', 'Show Password');
+            }
+        });
+
+        // jQuery Validation and Submission
+        $(document).ready(function () {
+            $("#loginForm").validate({
+                rules: {
+                    username: {
+                        required: true,
+                        minlength: 3,
+                    },
+                    password: {
+                        required: true,
+                        minlength: 4,
+                    },
+                },
+                messages: {
+                    username: {
+                        required: "Please enter your username",
+                        minlength: "Username must be at least 3 characters",
+                    },
+                    password: {
+                        required: "Please enter your password",
+                        minlength: "Password must be at least 4 characters",
+                    },
+                },
+                errorPlacement: function (error, element) {
+                    if (element.parent(".input-wrapper").length) {
+                        error.insertAfter(element.parent(".input-wrapper"));
+                    } else {
+                        error.insertAfter(element);
+                    }
+                },
+                submitHandler: function (form) {
+                    const $submitBtn = $("#submitBtn");
+                    $submitBtn.prop("disabled", true).text("Signing in...");
+
+                    $.ajax({
+                        url: "/user/login/credential/",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            username: $("#username").val().trim(),
+                            password: $("#password").val(),
+                        }),
+                        success: function (response) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Login Successful",
+                                text: "Welcome back!",
+                                timer: 1500,
+                                showConfirmButton: false,
+                            }).then(() => {
+                                window.location.href = response.redirect_url || "/";
+                            });
+                        },
+                        error: function (xhr) {
+                            $submitBtn.prop("disabled", false).text("Sign In");
+                            if (xhr.status === 401) {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Login Failed",
+                                    text: "Invalid username or password",
+                                    confirmButtonColor: "#764ba2"
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error",
+                                    text: "Something went wrong. Please try again.",
+                                    confirmButtonColor: "#764ba2"
+                                });
+                            }
+                        },
+                    });
+
+                    return false;
+                },
+            });
+        });
+    </script>
 </body>
+
 </html>
