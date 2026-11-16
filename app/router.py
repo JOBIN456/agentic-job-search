@@ -156,7 +156,7 @@ def admin_home_page(request: Request,admin: User = Depends(require_admin)):
 def logout(request: Request):
     request.session.clear()
     return RedirectResponse(
-        url="/user_login",
+        url="/admin_login",
         status_code=302
     )   
 
