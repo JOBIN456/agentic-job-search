@@ -128,7 +128,6 @@ def user_login_page(request: Request):
     )
 
 @router_frontend.post("/user/login/credential/")
-@router_frontend.post("/user_login")
 def user_login_submit(
     request: Request,
     user: Userlogindata,
