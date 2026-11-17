@@ -70,32 +70,35 @@ def require_user(
 
     return user
 @router_frontend.get("/")
-def home_page(request: Request):
+def home_page(request: Request, user: User = Depends(require_user)):
     return templates.TemplateResponse(
         request=request,
         name="home.html",
         context={
-            "title": "AI JOB search"
+            "title": "AI JOB search",
+            "user": user
         }
     )
 
 @router_frontend.get("/cv_details")
-def home_page(request: Request):
+def cv_details_page(request: Request, user: User = Depends(require_user)):
     return templates.TemplateResponse(
         request=request,
         name="cv_extract.html",
         context={
-            "title": "cv fetch"
+            "title": "cv fetch",
+            "user": user
         }
     )
 
 @router_frontend.get("/chat")
-def chat_page(request: Request):
+def chat_page(request: Request, user: User = Depends(require_user)):
     return templates.TemplateResponse(
         request=request,
         name="chat.html",
         context={
-            "title": "AI Job Assistant Chat"
+            "title": "AI Job Assistant Chat",
+            "user": user
         }
     )
 
@@ -110,6 +113,7 @@ async def submit_cv(
     phone: str = Form(None),
     location: str = Form(None),
     jobTitle: str = Form(None),
+    user: User = Depends(require_user),
     db: Session = Depends(get_db)
 ):
     try:
