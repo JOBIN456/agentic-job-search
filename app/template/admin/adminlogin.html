@@ -269,7 +269,7 @@
             contentType: "application/json",
 
             data: JSON.stringify({
-              username: $("#name").val(),
+              username: $.trim($("#name").val()),
               password: $("#password").val(),
             }),
 

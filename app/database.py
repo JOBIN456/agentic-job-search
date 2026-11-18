@@ -6,7 +6,10 @@ from fastapi import UploadFile, HTTPException
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
 
-DATABASE_URL = "sqlite:///./app.db"
+# Server directory where database and uploaded CV files are stored
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_FILE = os.path.join(BASE_DIR, "app.db")
+DATABASE_URL = f"sqlite:///{DB_FILE.replace(os.sep, '/')}"
 
 engine = create_engine(
     DATABASE_URL,

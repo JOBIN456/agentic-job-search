@@ -163,9 +163,12 @@ def user_login_submit(
     user: Userlogindata,
     db: Session = Depends(get_db)
 ):
+    clean_username = user.username.strip() if user.username else ""
+    clean_password = user.password.strip() if user.password else ""
+
     existing_user = db.query(User).filter(
-        User.username == user.username,
-        User.password == user.password
+        User.username == clean_username,
+        User.password == clean_password
     ).first()
 
     if existing_user:
@@ -340,19 +343,24 @@ def update_user(
     }
 
 @router_admin.post("/admin/login/credential/")
-def data_submit(
+def admin_login_submit(
     request: Request,
     user: Userlogindata,
     db: Session = Depends(get_db)
 ):
+    clean_username = user.username.strip() if user.username else ""
+    clean_password = user.password.strip() if user.password else ""
+
     existing_user = db.query(User).filter(
-        User.username == user.username,
-        User.password == user.password,
+        User.username == clean_username,
+        User.password == clean_password,
         User.is_staff == True
     ).first()
 
     if existing_user:
         request.session["user_id"] = existing_user.id
+        request.session["username"] = existing_user.username
+        request.session["is_staff"] = existing_user.is_staff
 
         return {
             "success": True,
