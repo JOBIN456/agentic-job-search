@@ -69,7 +69,17 @@ def require_user(
         )
 
     return user
+
 @router_frontend.get("/")
+def user_login_page(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="login.html",
+        context={
+            "title": "user login"
+        }
+    )
+@router_frontend.get("/user_home")
 def home_page(request: Request, user: User = Depends(require_user)):
     return templates.TemplateResponse(
         request=request,
@@ -147,15 +157,7 @@ async def submit_cv(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router_frontend.get("/user_login")
-def user_login_page(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="login.html",
-        context={
-            "title": "user login"
-        }
-    )
+
 
 @router_frontend.post("/user/login/credential/")
 def user_login_submit(
