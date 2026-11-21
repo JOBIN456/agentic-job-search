@@ -79,6 +79,7 @@ def user_login_page(request: Request):
             "title": "user login"
         }
     )
+
 @router_frontend.get("/user_home")
 def home_page(request: Request, user: User = Depends(require_user)):
     return templates.TemplateResponse(
@@ -181,7 +182,7 @@ def user_login_submit(
         return {
             "success": True,
             "message": "Login successful",
-            "redirect_url": "/"
+            "redirect_url": "user_home"
         }
 
     raise HTTPException(
