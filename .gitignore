@@ -1,5 +1,28 @@
+# Environment & Secrets
 .env
-/env
-/pdf
+/env/
+env/
+venv/
+.venv/
+
+# Python cache & bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.cpython-*
+
+# Databases & local storage
+*.db
+*.sqlite3
 app.db
-/cv
+app/app.db
+
+# Uploads & Media
+/pdf/
+/cv/
+app/static/cv/
+
+# Jupyter & Editor artifacts
+.ipynb_checkpoints/
+.vscode/
+.idea/
