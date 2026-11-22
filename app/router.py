@@ -5,7 +5,8 @@ from sqlalchemy.orm import Session
 from database import get_db, user_data_save
 from models import User, CandidateProfile
 from schema.schema import UserSchema, Userlogindata, CandidateProfileSchema, CandidateProfileResponse
-
+from user_auth import require_user
+from admin_auth import require_admin
 
 router_frontend = APIRouter()
 
@@ -18,57 +19,57 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, "template") if os.path.exists(os.path.join
 templates = Jinja2Templates(directory=TEMPLATE_DIR)
 
 
-def require_admin(
-    request: Request,
-    db: Session = Depends(get_db)
-):
-    user_id = request.session.get("user_id")
+# def require_admin(
+#     request: Request,
+#     db: Session = Depends(get_db)
+# ):
+#     user_id = request.session.get("user_id")
 
-    if not user_id:
-        raise HTTPException(
-            status_code=401,
-            detail="Please log in first"
-        )
+#     if not user_id:
+#         raise HTTPException(
+#             status_code=401,
+#             detail="Please log in first"
+#         )
 
-    user = db.query(User).filter(
-        User.id == user_id,
-        User.is_staff == True
-    ).first()
+#     user = db.query(User).filter(
+#         User.id == user_id,
+#         User.is_staff == True
+#     ).first()
 
-    if not user:
-        request.session.clear()
-        raise HTTPException(
-            status_code=403,
-            detail="Admin access required"
-        )
+#     if not user:
+#         request.session.clear()
+#         raise HTTPException(
+#             status_code=403,
+#             detail="Admin access required"
+#         )
 
-    return user
+#     return user
 
 
-def require_user(
-    request: Request,
-    db: Session = Depends(get_db)
-):
-    user_id = request.session.get("user_id")
+# def require_user(
+#     request: Request,
+#     db: Session = Depends(get_db)
+# ):
+#     user_id = request.session.get("user_id")
 
-    if not user_id:
-        raise HTTPException(
-            status_code=401,
-            detail="Please log in first"
-        )
+#     if not user_id:
+#         raise HTTPException(
+#             status_code=401,
+#             detail="Please log in first"
+#         )
 
-    user = db.query(User).filter(
-        User.id == user_id
-    ).first()
+#     user = db.query(User).filter(
+#         User.id == user_id
+#     ).first()
 
-    if not user:
-        request.session.clear()
-        raise HTTPException(
-            status_code=401,
-            detail="User not found. Please log in again"
-        )
+#     if not user:
+#         request.session.clear()
+#         raise HTTPException(
+#             status_code=401,
+#             detail="User not found. Please log in again"
+#         )
 
-    return user
+#     return user
 
 @router_frontend.get("/")
 def user_login_page(request: Request):
