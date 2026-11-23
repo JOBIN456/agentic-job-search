@@ -92,3 +92,9 @@ graph.add_edge("pdf_parse", "llm_node")
 graph.add_edge("llm_node", END)
 
 app = graph.compile()
+
+def fetch_resume(path_to_pdf: str):
+    result = app.invoke({
+        "path_to_pdf": path_to_pdf
+    })
+    return result
