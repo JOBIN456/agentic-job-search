@@ -79,3 +79,16 @@ Resume:
         "resume_json": resume_json,
         "name": resume_json["name"]
     }
+
+
+graph = StateGraph(JobfetchState)
+
+graph.add_node("pdf_parse", pdf_parse)
+graph.add_node("llm_node", llm_node)
+
+graph.set_entry_point("pdf_parse")
+
+graph.add_edge("pdf_parse", "llm_node")
+graph.add_edge("llm_node", END)
+
+app = graph.compile()
