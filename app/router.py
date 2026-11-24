@@ -7,6 +7,7 @@ from models import User, CandidateProfile
 from schema.schema import UserSchema, Userlogindata, CandidateProfileSchema, CandidateProfileResponse
 from user_auth import require_user
 from admin_auth import require_admin
+import admin_crud
 
 router_frontend = APIRouter()
 
@@ -18,58 +19,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE_DIR = os.path.join(BASE_DIR, "template") if os.path.exists(os.path.join(BASE_DIR, "template")) else "template"
 templates = Jinja2Templates(directory=TEMPLATE_DIR)
 
-
-# def require_admin(
-#     request: Request,
-#     db: Session = Depends(get_db)
-# ):
-#     user_id = request.session.get("user_id")
-
-#     if not user_id:
-#         raise HTTPException(
-#             status_code=401,
-#             detail="Please log in first"
-#         )
-
-#     user = db.query(User).filter(
-#         User.id == user_id,
-#         User.is_staff == True
-#     ).first()
-
-#     if not user:
-#         request.session.clear()
-#         raise HTTPException(
-#             status_code=403,
-#             detail="Admin access required"
-#         )
-
-#     return user
-
-
-# def require_user(
-#     request: Request,
-#     db: Session = Depends(get_db)
-# ):
-#     user_id = request.session.get("user_id")
-
-#     if not user_id:
-#         raise HTTPException(
-#             status_code=401,
-#             detail="Please log in first"
-#         )
-
-#     user = db.query(User).filter(
-#         User.id == user_id
-#     ).first()
-
-#     if not user:
-#         request.session.clear()
-#         raise HTTPException(
-#             status_code=401,
-#             detail="User not found. Please log in again"
-#         )
-
-#     return user
 
 @router_frontend.get("/")
 def user_login_page(request: Request):
@@ -214,96 +163,30 @@ def admin_home_page(request: Request,admin: User = Depends(require_admin)):
     )
 
 
-# ADMIN LOGIC
+# ==========================================
+# ADMIN CRUD & AUTH LOGIC
+# ==========================================
 
 @router_frontend.get("/logout")
+@router_frontend.get("/logout/")
 def logout(request: Request):
     request.session.clear()
     return RedirectResponse(
         url="/admin_login",
         status_code=302
-    )   
+    )
 
 @router_admin.post("/admin/data_submit", response_model=UserSchema)
 def data_submit(user: UserSchema, db: Session = Depends(get_db)):
-
-    # Check if username already exists
-    existing_user = db.query(User).filter(
-        User.username == user.username
-    ).first()
-
-    if existing_user:
-        raise HTTPException(
-            status_code=400,
-            detail="Username already exists in DB"
-        )
-
-    # Create user
-    new_user = User(
-        username=user.username,
-        password=user.password,
-        is_staff=user.is_staff
-    )
-
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-
-    return new_user
+    return admin_crud.create_user(db=db, user=user)
 
 @router_admin.get("/admin/users")
 def get_users(db: Session = Depends(get_db)):
-
-    users = db.query(User).all()
-
-    return [
-        {
-            "id": user.id,
-            "username": user.username,
-            "is_staff": user.is_staff
-        }
-        for user in users
-    ]
-
-
+    return admin_crud.get_all_users(db=db)
 
 @router_admin.get("/admin/users/{user_id}")
 def get_user(user_id: int, db: Session = Depends(get_db)):
-
-    user = db.query(User).filter(User.id == user_id).first()
-
-    if not user:
-        raise HTTPException(
-            status_code=404,
-            detail="User not found"
-        )
-
-    return {
-        "id": user.id,
-        "username": user.username,
-        "password":user.password,
-        "is_staff": user.is_staff
-    }
-
-
-@router_admin.delete("/admin/users/{user_id}")
-def delete_user(user_id: int, db: Session = Depends(get_db)):
-
-    user = db.query(User).filter(User.id == user_id).first()
-
-    if not user:
-        raise HTTPException(
-            status_code=404,
-            detail="User not found"
-        )
-
-    db.delete(user)
-    db.commit()
-
-    return {
-        "message": "User deleted successfully",
-        "id": user_id
-    }
+    return admin_crud.get_user_by_id(db=db, user_id=user_id)
 
 @router_admin.put("/admin/users/{user_id}")
 def update_user(
@@ -311,40 +194,11 @@ def update_user(
     user_data: UserSchema,
     db: Session = Depends(get_db)
 ):
-    user = db.query(User).filter(User.id == user_id).first()
+    return admin_crud.update_user_by_id(db=db, user_id=user_id, user_data=user_data)
 
-    if not user:
-        raise HTTPException(
-            status_code=404,
-            detail="User not found"
-        )
-
-    # Check if username is being changed
-    existing_user = db.query(User).filter(
-        User.username == user_data.username,
-        User.id != user_id
-    ).first()
-
-    if existing_user:
-        raise HTTPException(
-            status_code=400,
-            detail="Username already exists in DB"
-        )
-
-    # Update user
-    user.username = user_data.username
-    user.password = user_data.password
-    user.is_staff = user_data.is_staff
-
-    db.commit()
-    db.refresh(user)
-
-    return {
-        "message": "User updated successfully",
-        "id": user.id,
-        "username": user.username,
-        "is_staff": user.is_staff
-    }
+@router_admin.delete("/admin/users/{user_id}")
+def delete_user(user_id: int, db: Session = Depends(get_db)):
+    return admin_crud.delete_user_by_id(db=db, user_id=user_id)
 
 @router_admin.post("/admin/login/credential/")
 def admin_login_submit(
@@ -352,26 +206,13 @@ def admin_login_submit(
     user: Userlogindata,
     db: Session = Depends(get_db)
 ):
-    clean_username = user.username.strip() if user.username else ""
-    clean_password = user.password.strip() if user.password else ""
+    admin_user = admin_crud.authenticate_admin(db=db, user_data=user)
 
-    existing_user = db.query(User).filter(
-        User.username == clean_username,
-        User.password == clean_password,
-        User.is_staff == True
-    ).first()
+    request.session["user_id"] = admin_user.id
+    request.session["username"] = admin_user.username
+    request.session["is_staff"] = admin_user.is_staff
 
-    if existing_user:
-        request.session["user_id"] = existing_user.id
-        request.session["username"] = existing_user.username
-        request.session["is_staff"] = existing_user.is_staff
-
-        return {
-            "success": True,
-            "redirect_url": "/admin/home"
-        }
-
-    raise HTTPException(
-        status_code=401,
-        detail="Invalid username or password"
-    )
+    return {
+        "success": True,
+        "redirect_url": "/admin/home"
+    }
